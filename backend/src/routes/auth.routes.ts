@@ -9,6 +9,11 @@ import {
 } from '../controllers/auth.controller';
 import { authenticate } from '../middleware/auth';
 import { authRateLimiter } from '../middleware/rateLimiter';
+import {
+  validateRegister,
+  validateLogin,
+  validateChangePassword,
+} from '../middleware/validation';
 
 const router = Router();
 
@@ -45,7 +50,7 @@ const router = Router();
  *       201:
  *         description: User registered successfully
  */
-router.post('/register', authRateLimiter, register);
+router.post('/register', authRateLimiter, validateRegister, register);
 
 /**
  * @swagger
@@ -71,7 +76,7 @@ router.post('/register', authRateLimiter, register);
  *       200:
  *         description: Login successful
  */
-router.post('/login', authRateLimiter, login);
+router.post('/login', authRateLimiter, validateLogin, login);
 
 /**
  * @swagger
@@ -150,7 +155,7 @@ router.get('/me', authenticate, getCurrentUser);
  *       200:
  *         description: Password changed successfully
  */
-router.post('/change-password', authenticate, changePassword);
+router.post('/change-password', authenticate, validateChangePassword, changePassword);
 
 export default router;
 

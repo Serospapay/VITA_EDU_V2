@@ -61,7 +61,7 @@ export const register = async (
       },
     });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
 
@@ -121,7 +121,7 @@ export const login = async (
       },
     });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
 
@@ -184,7 +184,7 @@ export const logout = async (
       message: 'Logged out successfully',
     });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
 
@@ -226,7 +226,7 @@ export const getCurrentUser = async (
       data: user,
     });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
 
@@ -275,7 +275,7 @@ export const changePassword = async (
       message: 'Password changed successfully',
     });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
 

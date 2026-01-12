@@ -74,7 +74,7 @@ export const getCourseMessages = async (
       data: messages.reverse(), // Reverse to show oldest first
     });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
 
@@ -145,7 +145,7 @@ export const sendCourseMessage = async (
       data: message,
     });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
 
@@ -231,7 +231,7 @@ export const getMyCourseChats = async (
       data: coursesWithUnread,
     });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
 
@@ -264,7 +264,7 @@ export const markCourseMessagesAsRead = async (
       message: 'Messages marked as read',
     });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
 

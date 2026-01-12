@@ -23,7 +23,7 @@ export const getMyNotifications = async (
       data: notifications,
     });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
 
@@ -55,7 +55,7 @@ export const markAsRead = async (
       data: notification,
     });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
 
@@ -84,7 +84,7 @@ export const deleteNotification = async (
       message: 'Notification deleted',
     });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
 

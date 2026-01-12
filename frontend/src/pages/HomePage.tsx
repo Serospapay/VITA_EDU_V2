@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../services/api';
+import { logger } from '../utils/logger';
 
 interface Stats {
   totalCourses: number;
@@ -66,8 +67,10 @@ const HomePage = () => {
         .sort((a: Course, b: Course) => (b._count.enrollments || 0) - (a._count.enrollments || 0))
         .slice(0, 3);
       setFeaturedCourses(featured);
-    } catch (error) {
-      console.error('Error fetching data:', error);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        logger.error('Error fetching data:', error.message);
+      }
       // Fallback to default stats
       setStats({
         totalCourses: 3,

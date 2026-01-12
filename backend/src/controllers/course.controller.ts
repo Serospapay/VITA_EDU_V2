@@ -168,7 +168,7 @@ export const getCourse = async (
     });
   } catch (error) {
     logger.error('Error in getCourses:', error);
-    next(error);
+    return next(error);
   }
 };
 
@@ -238,8 +238,8 @@ export const createCourse = async (
       data: course,
     });
   } catch (error) {
-    logger.error('Error in getCourses:', error);
-    next(error);
+    logger.error('Error in createCourse:', error);
+    return next(error);
   }
 };
 
@@ -294,7 +294,7 @@ export const updateCourse = async (
     });
   } catch (error) {
     logger.error('Error in getCourses:', error);
-    next(error);
+    return next(error);
   }
 };
 
@@ -333,7 +333,7 @@ export const deleteCourse = async (
     });
   } catch (error) {
     logger.error('Error in getCourses:', error);
-    next(error);
+    return next(error);
   }
 };
 
@@ -366,7 +366,7 @@ export const getTeacherCourses = async (
     });
   } catch (error) {
     logger.error('Error in getCourses:', error);
-    next(error);
+    return next(error);
   }
 };
 
@@ -401,7 +401,7 @@ export const getCourseStudents = async (
     });
   } catch (error) {
     logger.error('Error in getCourses:', error);
-    next(error);
+    return next(error);
   }
 };
 

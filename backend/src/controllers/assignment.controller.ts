@@ -195,7 +195,7 @@ export const createAssignment = async (
       data: assignment,
     });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
 
@@ -294,7 +294,7 @@ export const getAssignmentById = async (
       },
     });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
 
@@ -355,7 +355,7 @@ export const updateAssignment = async (
       data: updated,
     });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
 
@@ -399,7 +399,7 @@ export const deleteAssignment = async (
       message: 'Assignment deleted successfully',
     });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
 

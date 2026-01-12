@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../../services/api';
 import toast from 'react-hot-toast';
+import { logger } from '../../utils/logger';
 
 interface Course {
   id: string;
@@ -54,8 +55,10 @@ const CoursesPage = () => {
     try {
       const response = await api.get('/categories');
       setCategories(response.data.data || []);
-    } catch (error) {
-      console.error('Error fetching categories:', error);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        logger.error('Error fetching categories:', error.message);
+      }
     }
   };
 
@@ -95,9 +98,11 @@ const CoursesPage = () => {
       // 'newest' is already sorted by API (orderBy: createdAt desc)
 
       setCourses(coursesData);
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast.error('Помилка завантаження курсів');
-      console.error(error);
+      if (error instanceof Error) {
+        logger.error('Error fetching courses:', error.message);
+      }
     } finally {
       setLoading(false);
     }

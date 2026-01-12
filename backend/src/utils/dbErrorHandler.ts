@@ -34,7 +34,7 @@ export const isPrismaConnectionError = (error: any): boolean => {
 /**
  * Handle Prisma errors and attempt reconnection if needed
  */
-export const handlePrismaError = async (error: any): Promise<never> => {
+export const handlePrismaError = async (error: unknown): Promise<never> => {
   if (isPrismaConnectionError(error)) {
     logger.error('Database connection error detected:', {
       code: error.code,
@@ -74,7 +74,7 @@ export const handlePrismaError = async (error: any): Promise<never> => {
     switch (error.code) {
       case 'P2002':
         // Unique constraint violation
-        const target = (error.meta as any)?.target;
+        const target = (error.meta as { target?: string[] })?.target;
         throw new AppError(
           `Duplicate entry${target ? ` on ${target}` : ''}`,
           409

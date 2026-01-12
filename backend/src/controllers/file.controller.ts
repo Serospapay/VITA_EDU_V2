@@ -45,7 +45,7 @@ export const uploadFiles = async (
       data: fileRecords,
     });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
 
@@ -71,7 +71,7 @@ export const getFileById = async (
       data: file,
     });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
 
@@ -110,7 +110,7 @@ export const deleteFile = async (
       message: 'File deleted successfully',
     });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
 
@@ -133,7 +133,7 @@ export const getFilesByLesson = async (
       data: files,
     });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
 
@@ -156,7 +156,7 @@ export const getFilesByCourse = async (
       data: files,
     });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
 

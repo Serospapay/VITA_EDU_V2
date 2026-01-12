@@ -221,7 +221,7 @@ export const submitTest = async (
       },
     });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
 
@@ -402,7 +402,7 @@ export const getMySubmissions = async (
       data: submissions,
     });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
 
@@ -452,7 +452,7 @@ export const getAllMySubmissions = async (
       data: submissions,
     });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
 
@@ -535,7 +535,7 @@ export const gradeSubmission = async (
       data: updatedSubmission,
     });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
 
@@ -597,7 +597,7 @@ export const getSubmissionById = async (
       data: submission,
     });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
 
@@ -677,7 +677,7 @@ export const getTeacherPendingSubmissions = async (
       data: submissions,
     });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
 

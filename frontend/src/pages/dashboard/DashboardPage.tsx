@@ -4,6 +4,7 @@ import { useAppSelector } from '../../hooks/redux';
 import api from '../../services/api';
 import toast from 'react-hot-toast';
 import TeacherDashboard from '../teacher/TeacherDashboard';
+import { logger } from '../../utils/logger';
 
 interface Stats {
   enrollments: number;
@@ -75,10 +76,12 @@ const DashboardPage = () => {
         const assignmentsRes = await api.get('/assignments/my-upcoming?limit=5');
         _setUpcomingAssignments(assignmentsRes.data.data || []);
       } catch (err) {
-        console.log('No upcoming assignments endpoint');
+        logger.debug('No upcoming assignments endpoint');
       }
-    } catch (error: any) {
-      console.error(error);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        logger.error('Dashboard fetch error:', error.message);
+      }
       toast.error('Помилка завантаження даних');
     } finally {
       setLoading(false);

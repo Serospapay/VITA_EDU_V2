@@ -45,7 +45,7 @@ export const getMyEnrollments = async (
       data: enrollments,
     });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
 
@@ -100,7 +100,7 @@ export const enrollInCourse = async (
       data: enrollment,
     });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
 
@@ -129,7 +129,7 @@ export const unenrollFromCourse = async (
       data: enrollment,
     });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
 
@@ -184,7 +184,7 @@ export const adminEnrollStudent = async (
       data: enrollment,
     });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
 
@@ -206,7 +206,7 @@ export const adminUnenrollStudent = async (
       data: enrollment,
     });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
 
@@ -269,7 +269,7 @@ export const getCourseEnrollments = async (
       data: enrollments,
     });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
 

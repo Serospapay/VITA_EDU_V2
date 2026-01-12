@@ -3,6 +3,7 @@ import { useAppSelector } from '../hooks/redux';
 import api from '../services/api';
 import socketService from '../services/socket.service';
 import toast from 'react-hot-toast';
+import { logger } from '../utils/logger';
 
 interface Course {
   id: string;
@@ -98,8 +99,10 @@ const CourseChatWidget = () => {
       if (response.data.data && response.data.data.length > 0 && !selectedCourse) {
         setSelectedCourse(response.data.data[0]);
       }
-    } catch (error: any) {
-      console.error('Error fetching courses:', error);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        logger.error('Error fetching courses:', error.message);
+      }
     }
   };
 
@@ -120,8 +123,10 @@ const CourseChatWidget = () => {
           ? { ...course, unreadMessages: 0 }
           : course
       ));
-    } catch (error: any) {
-      console.error('Error fetching messages:', error);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        logger.error('Error fetching messages:', error.message);
+      }
     } finally {
       setLoading(false);
     }

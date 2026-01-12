@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../../services/api';
 import toast from 'react-hot-toast';
+import { logger } from '../../utils/logger';
 
 interface Assignment {
   id: string;
@@ -54,9 +55,11 @@ const MyAssignmentsPage = () => {
       // Fetch assignments with my submissions
       const assignmentsRes = await api.get(`/assignments/course/${courseId}`);
       setAssignments(assignmentsRes.data.data);
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast.error('Помилка завантаження завдань');
-      console.error(error);
+      if (error instanceof Error) {
+        logger.error('My assignments error:', error.message);
+      }
     } finally {
       setLoading(false);
     }

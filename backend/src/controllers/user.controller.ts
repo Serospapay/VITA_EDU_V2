@@ -72,7 +72,7 @@ export const getUsers = async (
       },
     });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
 
@@ -129,7 +129,7 @@ export const getUserById = async (
       },
     });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
 
@@ -188,7 +188,7 @@ export const updateUser = async (
       data: user,
     });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
 
@@ -210,7 +210,7 @@ export const deleteUser = async (
       message: 'User deleted successfully',
     });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
 
@@ -268,7 +268,7 @@ export const getUserStats = async (
       },
     });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
 
@@ -341,7 +341,7 @@ export const verifyUserEmail = async (
       data: user,
     });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
 

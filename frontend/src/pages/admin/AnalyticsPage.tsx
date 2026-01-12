@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../../services/api';
 import toast from 'react-hot-toast';
+import { logger } from '../../utils/logger';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -45,6 +46,35 @@ interface TeacherStats {
   averageProgress: number;
 }
 
+interface User {
+  id: string;
+  firstName: string;
+  lastName: string;
+  role: string;
+  teacher?: {
+    id: string;
+  };
+}
+
+interface Course {
+  id: string;
+  title: string;
+  teacherId?: string;
+  teacher?: {
+    id: string;
+  };
+  _count?: {
+    enrollments: number;
+  };
+  enrollments?: Array<{
+    progress: number;
+  }>;
+}
+
+interface Enrollment {
+  progress: number;
+}
+
 const AnalyticsPage = () => {
   const [loading, setLoading] = useState(true);
   const [courses, setCourses] = useState<CourseStats[]>([]);
@@ -66,21 +96,21 @@ const AnalyticsPage = () => {
       setCourses(coursesData);
 
       const usersData = teachersRes.data.data;
-      const users = usersData.users || usersData;
-      const teachersList = users.filter((u: any) => u.role === 'TEACHER');
+      const users: User[] = usersData.users || usersData;
+      const teachersList = users.filter((u: User) => u.role === 'TEACHER');
 
-      const teacherStats = teachersList.map((teacher: any) => {
+      const teacherStats = teachersList.map((teacher: User) => {
         // Check both teacherId and teacher.id for compatibility
         const teacherCourses = coursesData.filter(
-          (c: any) => c.teacherId === teacher.id || c.teacher?.id === teacher.id
+          (c: Course) => c.teacherId === teacher.id || c.teacher?.id === teacher.id
         );
         const totalStudents = teacherCourses.reduce(
-          (sum: number, c: any) => sum + (c._count?.enrollments || 0),
+          (sum: number, c: Course) => sum + (c._count?.enrollments || 0),
           0
         );
-        const totalProgress = teacherCourses.reduce((sum: number, c: any) => {
+        const totalProgress = teacherCourses.reduce((sum: number, c: Course) => {
           const courseProgress =
-            c.enrollments?.reduce((s: number, e: any) => s + e.progress, 0) || 0;
+            c.enrollments?.reduce((s: number, e: Enrollment) => s + e.progress, 0) || 0;
           return sum + courseProgress;
         }, 0);
         const avgProgress = totalStudents > 0 ? totalProgress / totalStudents : 0;
@@ -98,9 +128,11 @@ const AnalyticsPage = () => {
       });
 
       setTeachers(teacherStats);
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast.error('Помилка завантаження аналітики');
-      console.error(error);
+      if (error instanceof Error) {
+        logger.error('Analytics fetch error:', error.message);
+      }
     } finally {
       setLoading(false);
     }

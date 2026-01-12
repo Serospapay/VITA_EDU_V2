@@ -4,6 +4,7 @@ import { authService } from '../../services/auth.service';
 import api from '../../services/api';
 import toast from 'react-hot-toast';
 import Logo from '../../components/Logo';
+import { logger } from '../../utils/logger';
 
 interface Course {
   id: string;
@@ -35,8 +36,10 @@ const RegisterPage = () => {
       const response = await api.get('/courses?status=PUBLISHED');
       const coursesData = response.data.data;
       setCourses(coursesData.courses || coursesData || []);
-    } catch (error) {
-      console.error('Error fetching courses:', error);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        logger.error('Error fetching courses:', error.message);
+      }
     }
   };
 

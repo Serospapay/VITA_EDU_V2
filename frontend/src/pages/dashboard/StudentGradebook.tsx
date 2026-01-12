@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useAppSelector } from '../../hooks/redux';
 import api from '../../services/api';
 import toast from 'react-hot-toast';
+import { logger } from '../../utils/logger';
 
 interface GradeEntry {
   id: string;
@@ -105,8 +106,10 @@ const StudentGradebook = () => {
       });
 
       setCourseStats(Array.from(statsMap.values()));
-    } catch (error: any) {
-      console.error(error);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        logger.error('Student gradebook error:', error.message);
+      }
       toast.error('Помилка завантаження оцінок');
     } finally {
       setLoading(false);

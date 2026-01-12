@@ -12,6 +12,7 @@ import { stream } from './utils/logger';
 import { errorHandler } from './middleware/errorHandler';
 import { notFound } from './middleware/notFound';
 import { rateLimiter } from './middleware/rateLimiter';
+import { sanitizeInput } from './middleware/sanitize';
 import prisma from './config/database';
 
 // Import routes
@@ -105,6 +106,9 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // Cookie parser
 app.use(cookieParser());
+
+// Sanitization - очищення вхідних даних від потенційно небезпечного контенту
+app.use(sanitizeInput);
 
 // Logging
 if (process.env.NODE_ENV === 'development') {

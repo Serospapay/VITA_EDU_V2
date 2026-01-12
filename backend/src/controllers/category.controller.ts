@@ -17,7 +17,7 @@ export const getCategories = async (
       data: categories,
     });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
 
@@ -51,7 +51,7 @@ export const getCategoryById = async (
       data: category,
     });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
 

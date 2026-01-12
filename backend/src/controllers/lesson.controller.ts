@@ -35,7 +35,7 @@ export const getLessonById = async (
       data: lesson,
     });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
 
@@ -58,7 +58,7 @@ export const getLessonsByCourse = async (
       data: lessons,
     });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
 
@@ -106,7 +106,7 @@ export const createLesson = async (
       data: lesson,
     });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
 
@@ -130,7 +130,7 @@ export const updateLesson = async (
       data: lesson,
     });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
 
@@ -152,7 +152,7 @@ export const deleteLesson = async (
       message: 'Lesson deleted successfully',
     });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
 
