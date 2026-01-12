@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { store } from '../store';
 import { logout } from '../store/slices/authSlice';
+import { logger } from '../utils/logger';
 
 const API_URL = (import.meta.env as { VITE_API_URL?: string }).VITE_API_URL || 'http://localhost:5000/api';
 
@@ -19,9 +20,7 @@ api.interceptors.request.use(
       config.headers.Authorization = `Bearer ${token}`;
     }
     // Log request in dev mode
-    if (import.meta.env.DEV) {
-      console.log(`📤 API Request: ${config.method?.toUpperCase()} ${config.baseURL}${config.url}`);
-    }
+    logger.debug(`📤 API Request: ${config.method?.toUpperCase()} ${config.baseURL}${config.url}`);
     return config;
   },
   (error) => {
@@ -33,15 +32,13 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
-    // Log errors in dev mode
-    if (import.meta.env.DEV) {
-      console.error('❌ API Error:', {
+    // Log errors
+    logger.error('❌ API Error:', {
         url: error.config?.url,
         status: error.response?.status,
         message: error.message,
         baseURL: error.config?.baseURL,
       });
-    }
 
     const originalRequest = error.config;
 

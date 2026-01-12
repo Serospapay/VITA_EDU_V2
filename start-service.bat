@@ -59,6 +59,12 @@ if "%choice%"=="5" (
     exit /b 0
 )
 
+REM Invalid choice
+echo.
+echo Невірний вибір! Будь ласка, виберіть число від 1 до 5.
+pause
+goto :end
+
 :end
 goto :eof
 

@@ -103,7 +103,7 @@ model Course {
   quizzes       Quiz[]
   announcements Announcement[]
   files         File[]
-  messages      Message[]       @relation("CourseMessages")
+  messages      Message[]      @relation("CourseMessages")
 
   @@index([teacherId])
   @@index([categoryId])
@@ -315,7 +315,6 @@ enum SubmissionStatus {
 model Submission {
   id            String           @id @default(cuid())
   content       String?          @db.Text // Текстова відповідь або опис
-  fileUrl       String? // URL завантаженого файлу (deprecated)
   files         String[] // Масив URL-ів файлів (JSON array)
   githubUrl     String? // URL GitHub репозиторію
   assignmentId  String
@@ -483,14 +482,14 @@ model Message {
   id         String   @id @default(cuid())
   content    String   @db.Text
   senderId   String
-  receiverId String?  // Nullable for course messages
+  receiverId String? // Nullable for course messages
   courseId   String? // Для курс-чатів: null = приватне повідомлення, заповнено = курс-чат
   isRead     Boolean  @default(false)
   createdAt  DateTime @default(now())
 
   // Relations
-  sender   User   @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
-  receiver User?  @relation("ReceivedMessages", fields: [receiverId], references: [id], onDelete: Cascade)
+  sender   User    @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver User?   @relation("ReceivedMessages", fields: [receiverId], references: [id], onDelete: Cascade)
   course   Course? @relation("CourseMessages", fields: [courseId], references: [id], onDelete: Cascade)
 
   @@index([senderId])
@@ -592,4 +591,3 @@ model File {
   @@index([uploaderId])
   @@map("files")
 }
-

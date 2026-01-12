@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { AppError } from '../middleware/errorHandler';
+import { AppError } from '../utils/AppError';
 import prisma from '../config/database';
 
 interface TestAnswer {

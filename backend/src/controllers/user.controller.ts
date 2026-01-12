@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
+import { Prisma } from '@prisma/client';
 import prisma from '../config/database';
-import { AppError } from '../middleware/errorHandler';
+import { AppError } from '../utils/AppError';
+import { logger } from '../utils/logger';
 
 // Get all users (admin only)
 export const getUsers = async (
@@ -14,10 +16,10 @@ export const getUsers = async (
     const skip = (Number(page) - 1) * Number(limit);
     const take = Number(limit);
 
-    const where: any = {};
+    const where: Prisma.UserWhereInput = {};
 
-    if (role) where.role = role;
-    if (status) where.status = status;
+    if (role) where.role = role as Prisma.EnumRoleFilter<'User'>;
+    if (status) where.status = status as Prisma.EnumUserStatusFilter<'User'>;
     if (search) {
       where.OR = [
         { firstName: { contains: search as string, mode: 'insensitive' } },
@@ -151,7 +153,7 @@ export const updateUser = async (
     }
 
     // Only admin can change role
-    const updateData: any = {
+    const updateData: Prisma.UserUpdateInput = {
       firstName,
       lastName,
       bio,
@@ -329,7 +331,7 @@ export const verifyUserEmail = async (
         }
       } catch (enrollError) {
         // Log error but don't fail verification
-        console.error('Auto-enrollment error:', enrollError);
+        logger.error('Auto-enrollment error:', enrollError);
       }
     }
 

@@ -62,7 +62,7 @@ const CoursesPage = () => {
   const fetchCourses = async () => {
     try {
       setLoading(true);
-      const params: any = {
+      const params: Record<string, string | number> = {
         status: 'PUBLISHED',
         limit: 100,
       };

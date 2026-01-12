@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import prisma from '../config/database';
-import { AppError } from '../middleware/errorHandler';
+import { AppError } from '../utils/AppError';
+import { logger } from '../utils/logger';
 
 // Get user's enrollments
 export const getMyEnrollments = async (
@@ -234,7 +235,19 @@ export const getCourseEnrollments = async (
                   courseId: courseId,
                 },
               },
-              include: {
+              select: {
+                id: true,
+                content: true,
+                files: true,
+                githubUrl: true,
+                status: true,
+                score: true,
+                maxScore: true,
+                feedback: true,
+                attemptNumber: true,
+                timeSpent: true,
+                submittedAt: true,
+                gradedAt: true,
                 assignment: {
                   select: {
                     id: true,

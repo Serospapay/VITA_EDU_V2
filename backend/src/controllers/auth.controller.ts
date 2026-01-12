@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import bcrypt from 'bcrypt';
 import prisma from '../config/database';
-import { AppError } from '../middleware/errorHandler';
+import { AppError } from '../utils/AppError';
 import { generateTokens, verifyRefreshToken } from '../utils/jwt';
 import { logger } from '../utils/logger';
 

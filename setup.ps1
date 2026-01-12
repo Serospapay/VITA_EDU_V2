@@ -59,26 +59,26 @@ $dbPasswordPlain = [Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.I
 
 # 5. Create database
 Write-Host ""
-Write-Host "[5/7] Creating database vitaedu_db..." -ForegroundColor Yellow
+Write-Host "[5/7] Creating database lms_db..." -ForegroundColor Yellow
 $env:PGPASSWORD = $dbPasswordPlain
 try {
-    $dbExists = psql -U postgres -lqt 2>$null | Select-String -Pattern "vitaedu_db" -Quiet
+    $dbExists = psql -U postgres -lqt 2>$null | Select-String -Pattern "lms_db" -Quiet
     if ($dbExists) {
-        Write-Host "WARNING Database vitaedu_db already exists" -ForegroundColor Yellow
+        Write-Host "WARNING Database lms_db already exists" -ForegroundColor Yellow
         $recreate = Read-Host "Recreate database? All data will be deleted! (y/n)"
         if ($recreate -eq "y") {
-            psql -U postgres -c "DROP DATABASE IF EXISTS vitaedu_db;" 2>$null
-            psql -U postgres -c "CREATE DATABASE vitaedu_db;" 2>$null
+            psql -U postgres -c "DROP DATABASE IF EXISTS lms_db;" 2>$null
+            psql -U postgres -c "CREATE DATABASE lms_db;" 2>$null
             Write-Host "OK Database recreated" -ForegroundColor Green
         }
     } else {
-        psql -U postgres -c "CREATE DATABASE vitaedu_db;" 2>$null
+        psql -U postgres -c "CREATE DATABASE lms_db;" 2>$null
         Write-Host "OK Database created" -ForegroundColor Green
     }
 } catch {
     Write-Host "WARNING Could not create DB automatically. Create manually:" -ForegroundColor Yellow
     Write-Host "psql -U postgres" -ForegroundColor Cyan
-    Write-Host "CREATE DATABASE vitaedu_db;" -ForegroundColor Cyan
+    Write-Host "CREATE DATABASE lms_db;" -ForegroundColor Cyan
 }
 Remove-Item Env:\PGPASSWORD
 
@@ -100,7 +100,8 @@ Write-Host "Creating .env file..." -ForegroundColor Yellow
 $envContent = @"
 NODE_ENV=development
 PORT=5000
-DATABASE_URL=postgresql://postgres:$dbPasswordPlain@localhost:5432/vitaedu_db
+HOST=localhost
+DATABASE_URL=postgresql://postgres:$dbPasswordPlain@localhost:5432/lms_db
 REDIS_URL=redis://localhost:6379
 JWT_SECRET=lms-jwt-secret-$(Get-Random)-change-in-production
 JWT_EXPIRES_IN=1h

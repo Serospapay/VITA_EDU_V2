@@ -13,32 +13,68 @@ import { createServer } from 'http';
 import app from './app';
 import { logger } from './utils/logger';
 import { connectRedis } from './config/redis';
-import { connectDatabase, disconnectDatabase } from './config/database';
+import { connectDatabase, disconnectDatabase, checkDatabaseHealth } from './config/database';
 import { initializeSocket } from './socket';
 
 const PORT = Number(process.env.PORT) || 5000;
+const MAX_RESTART_ATTEMPTS = 5;
+let restartAttempts = 0;
+let httpServer: any = null;
+let isShuttingDown = false;
+
+// Database health check interval
+const DB_HEALTH_CHECK_INTERVAL = 30000; // 30 seconds
+let dbHealthCheckInterval: NodeJS.Timeout | null = null;
 
 // Global error handlers - MUST be set before anything else
 process.on('uncaughtException', (error: Error) => {
-  logger.error('💥 UNCAUGHT EXCEPTION! Server will restart...', {
+  logger.error('💥 UNCAUGHT EXCEPTION!', {
     error: error.message,
     stack: error.stack,
+    name: error.name,
   });
+  
+  // Don't restart for operational errors
+  if (error.name === 'AppError' || error.message.includes('CORS')) {
+    logger.warn('Operational error, not restarting server');
+    return;
+  }
+  
   // Give time for logger to write
   setTimeout(() => {
-    process.exit(1);
-  }, 1000);
+    if (!isShuttingDown) {
+      restartServer('uncaughtException');
+    } else {
+      process.exit(1);
+    }
+  }, 2000);
 });
 
 process.on('unhandledRejection', (reason: unknown) => {
-  logger.error('💥 UNHANDLED REJECTION! Server will restart...', {
+  logger.error('💥 UNHANDLED REJECTION!', {
     reason: reason instanceof Error ? reason.message : String(reason),
     stack: reason instanceof Error ? reason.stack : undefined,
   });
+  
+  // Don't restart for database connection errors (handled separately)
+  if (reason instanceof Error && (
+    reason.message.includes('P1001') ||
+    reason.message.includes('P1002') ||
+    reason.message.includes('P1003') ||
+    reason.message.includes('P1000')
+  )) {
+    logger.warn('Database connection error, will attempt reconnection');
+    return;
+  }
+  
   // Give time for logger to write
   setTimeout(() => {
-    process.exit(1);
-  }, 1000);
+    if (!isShuttingDown) {
+      restartServer('unhandledRejection');
+    } else {
+      process.exit(1);
+    }
+  }, 2000);
 });
 
 // Handle process warnings
@@ -50,6 +86,59 @@ process.on('warning', (warning) => {
   });
 });
 
+// Restart server function
+async function restartServer(reason: string) {
+  if (isShuttingDown) return;
+  
+  restartAttempts++;
+  if (restartAttempts > MAX_RESTART_ATTEMPTS) {
+    logger.error(`❌ Maximum restart attempts (${MAX_RESTART_ATTEMPTS}) reached. Exiting.`);
+    process.exit(1);
+  }
+  
+  logger.warn(`🔄 Restarting server (attempt ${restartAttempts}/${MAX_RESTART_ATTEMPTS}) due to: ${reason}`);
+  
+  try {
+    // Cleanup
+    if (httpServer) {
+      httpServer.close();
+    }
+    if (dbHealthCheckInterval) {
+      clearInterval(dbHealthCheckInterval);
+    }
+    
+    // Wait before restart
+    await new Promise(resolve => setTimeout(resolve, 3000));
+    
+    // Restart
+    await startServer();
+    restartAttempts = 0; // Reset on successful restart
+  } catch (error) {
+    logger.error('Failed to restart server:', error);
+    setTimeout(() => restartServer(reason), 5000);
+  }
+}
+
+// Start database health monitoring
+function startDatabaseHealthCheck() {
+  if (dbHealthCheckInterval) {
+    clearInterval(dbHealthCheckInterval);
+  }
+  
+  dbHealthCheckInterval = setInterval(async () => {
+    const isHealthy = await checkDatabaseHealth();
+    if (!isHealthy) {
+      logger.warn('⚠️ Database health check failed, attempting reconnection...');
+      try {
+        await connectDatabase(3, 2000);
+        logger.info('✅ Database reconnected via health check');
+      } catch (error) {
+        logger.error('❌ Failed to reconnect database during health check:', error);
+      }
+    }
+  }, DB_HEALTH_CHECK_INTERVAL);
+}
+
 async function startServer() {
   try {
     // Connect to database (required)
@@ -60,24 +149,33 @@ async function startServer() {
     await connectRedis();
 
     // Create HTTP server
-    const httpServer = createServer(app);
+    httpServer = createServer(app);
 
     // Initialize Socket.io
     initializeSocket(httpServer);
     logger.info('✅ WebSocket server initialized');
 
-    // Start server - listen on all interfaces (0.0.0.0) to allow network access
-    const HOST = process.env.HOST || '0.0.0.0';
+    // Start server - listen ONLY on localhost (strict local mode)
+    const HOST = process.env.HOST || 'localhost';
     const server = httpServer.listen(PORT, HOST, () => {
       logger.info(`🚀 Server running on http://${HOST}:${PORT}`);
       logger.info(`📚 Environment: ${process.env.NODE_ENV || 'development'}`);
       logger.info(`📖 API Docs: http://${HOST}:${PORT}/api-docs`);
-      logger.info(`🌐 Accessible from network at http://<your-ip>:${PORT}`);
+      logger.info(`🔒 Local mode: Only accessible from this computer`);
+      
+      // Start database health monitoring
+      startDatabaseHealthCheck();
     });
 
     // Graceful shutdown
     const gracefulShutdown = async (signal: string) => {
+      isShuttingDown = true;
       logger.info(`${signal} received, shutting down gracefully`);
+      
+      if (dbHealthCheckInterval) {
+        clearInterval(dbHealthCheckInterval);
+      }
+      
       server.close(async () => {
         logger.info('HTTP server closed');
         try {
@@ -88,6 +186,12 @@ async function startServer() {
         }
         process.exit(0);
       });
+      
+      // Force exit after 10 seconds
+      setTimeout(() => {
+        logger.error('Forced shutdown after timeout');
+        process.exit(1);
+      }, 10000);
     };
 
     process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
@@ -109,13 +213,34 @@ async function startServer() {
           process.exit(1);
           break;
         default:
-          throw error;
+          logger.error('Server error:', error);
+          if (!isShuttingDown) {
+            restartServer('server error');
+          }
       }
     });
 
   } catch (error) {
     logger.error('Failed to start server:', error);
-    process.exit(1);
+    
+    // If database connection failed, try to restart
+    if (error instanceof Error && (
+      error.message.includes('DATABASE_URL') ||
+      error.message.includes('P1001') ||
+      error.message.includes('P1002') ||
+      error.message.includes('P1003') ||
+      error.message.includes('P1000')
+    )) {
+      logger.warn('Database connection failed, will retry...');
+      setTimeout(() => restartServer('database connection failed'), 5000);
+    } else {
+      // For other errors, exit or restart based on attempts
+      if (restartAttempts < MAX_RESTART_ATTEMPTS) {
+        setTimeout(() => restartServer('startup error'), 5000);
+      } else {
+        process.exit(1);
+      }
+    }
   }
 }
 

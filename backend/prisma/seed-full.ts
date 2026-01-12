@@ -1,4 +1,4 @@
-import { PrismaClient, Role, CourseStatus, CourseLevel } from '@prisma/client';
+import { PrismaClient, Role, CourseStatus, CourseLevel, NotificationType } from '@prisma/client';
 import bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient();
@@ -1547,6 +1547,435 @@ API підтримує:
   await Promise.all(submissions);
   console.log('✅ Submissions created');
 
+  // Get all users for relationships
+  const allUsers = await prisma.user.findMany();
+  const admin = allUsers.find(u => u.role === Role.ADMIN)!;
+  const allTeachers = allUsers.filter(u => u.role === Role.TEACHER);
+  const allStudents = allUsers.filter(u => u.role === Role.STUDENT);
+
+  // Get courses and lessons
+  const allCourses = await prisma.course.findMany();
+  const allLessons = await prisma.lesson.findMany();
+  const allSubmissions = await prisma.submission.findMany({ where: { status: 'GRADED' } });
+
+  // Create Grades for graded submissions
+  const grades = [];
+  for (const submission of allSubmissions) {
+    if (submission.score !== null) {
+      grades.push(
+        prisma.grade.create({
+          data: {
+            score: submission.score,
+            maxScore: submission.maxScore || 100,
+            feedback: submission.feedback || 'Хороша робота!',
+            submissionId: submission.id,
+            userId: submission.userId,
+          },
+        })
+      );
+    }
+  }
+  await Promise.all(grades);
+  console.log('✅ Grades created');
+
+  // Create Quizzes
+  const quiz1 = await prisma.quiz.create({
+    data: {
+      title: 'Тест: JavaScript основи',
+      description: 'Перевірка знань з JavaScript ES6+, асинхронності та DOM',
+      timeLimit: 30,
+      passingScore: 70,
+      maxAttempts: 3,
+      courseId: fullStackCourse.id,
+      questions: {
+        create: [
+          {
+            text: 'Що таке closure в JavaScript?',
+            type: 'SINGLE_CHOICE',
+            points: 10,
+            order: 0,
+            options: {
+              create: [
+                { text: 'Функція, яка має доступ до змінних зовнішньої області видимості', isCorrect: true, order: 0 },
+                { text: 'Метод закриття вікна браузера', isCorrect: false, order: 1 },
+                { text: 'Техніка оптимізації коду', isCorrect: false, order: 2 },
+                { text: 'Способ закриття з\'єднання з сервером', isCorrect: false, order: 3 },
+              ],
+            },
+          },
+          {
+            text: 'Які методи має Promise?',
+            type: 'MULTIPLE_CHOICE',
+            points: 15,
+            order: 1,
+            options: {
+              create: [
+                { text: 'then', isCorrect: true, order: 0 },
+                { text: 'catch', isCorrect: true, order: 1 },
+                { text: 'finally', isCorrect: true, order: 2 },
+                { text: 'complete', isCorrect: false, order: 3 },
+              ],
+            },
+          },
+          {
+            text: 'let та const підтримують hoisting?',
+            type: 'TRUE_FALSE',
+            points: 10,
+            order: 2,
+            options: {
+              create: [
+                { text: 'Так', isCorrect: false, order: 0 },
+                { text: 'Ні', isCorrect: true, order: 1 },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  });
+
+  const quiz2 = await prisma.quiz.create({
+    data: {
+      title: 'Тест: React Hooks',
+      description: 'Перевірка знань з React Hooks та їх використання',
+      timeLimit: 25,
+      passingScore: 65,
+      maxAttempts: 2,
+      courseId: reactCourse.id,
+      questions: {
+        create: [
+          {
+            text: 'Який hook використовується для побічних ефектів?',
+            type: 'SINGLE_CHOICE',
+            points: 10,
+            order: 0,
+            options: {
+              create: [
+                { text: 'useState', isCorrect: false, order: 0 },
+                { text: 'useEffect', isCorrect: true, order: 1 },
+                { text: 'useContext', isCorrect: false, order: 2 },
+                { text: 'useReducer', isCorrect: false, order: 3 },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  });
+
+  console.log('✅ Quizzes created');
+
+  // Create Quiz Attempts
+  const quizQuestions1 = await prisma.question.findMany({ where: { quizId: quiz1.id }, include: { options: true } });
+  const quizQuestions2 = await prisma.question.findMany({ where: { quizId: quiz2.id }, include: { options: true } });
+
+  const quizAttempts = [];
+  // Student 0 attempts quiz 1 - passed
+  const attempt1 = await prisma.quizAttempt.create({
+    data: {
+      quizId: quiz1.id,
+      userId: allStudents[0].id,
+      score: 85,
+      maxScore: 35,
+      isPassed: true,
+      startedAt: new Date('2024-11-05T10:00:00'),
+      completedAt: new Date('2024-11-05T10:25:00'),
+      answers: {
+        create: quizQuestions1.map(q => ({
+          questionId: q.id,
+          selectedOptions: q.options.filter(o => o.isCorrect).map(o => o.id),
+          isCorrect: true,
+          points: q.points,
+        })),
+      },
+    },
+  });
+  quizAttempts.push(attempt1);
+
+  // Student 1 attempts quiz 1 - failed
+  const attempt2 = await prisma.quizAttempt.create({
+    data: {
+      quizId: quiz1.id,
+      userId: allStudents[1].id,
+      score: 45,
+      maxScore: 35,
+      isPassed: false,
+      startedAt: new Date('2024-11-06T14:00:00'),
+      completedAt: new Date('2024-11-06T14:28:00'),
+      answers: {
+        create: [
+          {
+            questionId: quizQuestions1[0].id,
+            selectedOptions: [quizQuestions1[0].options[1].id],
+            isCorrect: false,
+            points: 0,
+          },
+          {
+            questionId: quizQuestions1[1].id,
+            selectedOptions: [quizQuestions1[1].options[0].id],
+            isCorrect: false,
+            points: 5,
+          },
+        ],
+      },
+    },
+  });
+  quizAttempts.push(attempt2);
+
+  console.log('✅ Quiz attempts created');
+
+  // Create Attendance
+  const attendanceRecords = [];
+  const today = new Date();
+  for (let i = 0; i < 10; i++) {
+    const date = new Date(today);
+    date.setDate(date.getDate() - i);
+    const statuses = ['present', 'present', 'present', 'late', 'absent'];
+    const status = statuses[Math.floor(Math.random() * statuses.length)];
+    
+    attendanceRecords.push(
+      prisma.attendance.create({
+        data: {
+          userId: allStudents[i % allStudents.length].id,
+          date: date,
+          status: status,
+          notes: status === 'late' ? 'Запізнився на 5 хвилин' : status === 'absent' ? 'Не прийшов без поважної причини' : null,
+        },
+      })
+    );
+  }
+  await Promise.all(attendanceRecords);
+  console.log('✅ Attendance records created');
+
+  // Create Messages (private and course messages)
+  const messages = [];
+  // Private messages
+  messages.push(
+    prisma.message.create({
+      data: {
+        content: 'Привіт! Чи можеш допомогти з домашнім завданням?',
+        senderId: allStudents[0].id,
+        receiverId: allStudents[1].id,
+        isRead: false,
+      },
+    })
+  );
+  messages.push(
+    prisma.message.create({
+      data: {
+        content: 'Так, звичайно! З яким питанням?',
+        senderId: allStudents[1].id,
+        receiverId: allStudents[0].id,
+        isRead: true,
+      },
+    })
+  );
+  // Course messages
+  messages.push(
+    prisma.message.create({
+      data: {
+        content: 'Доброго дня! Коли наступний урок?',
+        senderId: allStudents[2].id,
+        courseId: fullStackCourse.id,
+        isRead: false,
+      },
+    })
+  );
+  messages.push(
+    prisma.message.create({
+      data: {
+        content: 'Наступний урок у п\'ятницю о 18:00. Не забудьте підготуватись!',
+        senderId: allTeachers[0].id,
+        courseId: fullStackCourse.id,
+        isRead: false,
+      },
+    })
+  );
+  await Promise.all(messages);
+  console.log('✅ Messages created');
+
+  // Create Notifications
+  const notifications = [];
+  // Notifications for students
+  for (let i = 0; i < 5; i++) {
+    notifications.push(
+      prisma.notification.create({
+        data: {
+          title: 'Нове завдання',
+          message: `Опубліковано нове завдання для курсу "${allCourses[i % allCourses.length].title}"`,
+          type: 'INFO',
+          userId: allStudents[i].id,
+          link: `/courses/${allCourses[i % allCourses.length].id}`,
+          isRead: i < 3,
+        },
+      })
+    );
+  }
+  // Graded submission notifications
+  notifications.push(
+    prisma.notification.create({
+      data: {
+        title: 'Завдання оцінено',
+        message: 'Ваше завдання "REST API для блогу" отримало оцінку 95/100',
+        type: 'SUCCESS',
+        userId: allStudents[0].id,
+        link: '/dashboard/submissions',
+        isRead: false,
+      },
+    })
+  );
+  notifications.push(
+    prisma.notification.create({
+      data: {
+        title: 'Нагадування',
+        message: 'Термін здачі завдання "React компонент ToDo" закінчується через 2 дні',
+        type: 'WARNING',
+        userId: allStudents[3].id,
+        link: '/dashboard/assignments',
+        isRead: false,
+      },
+    })
+  );
+  await Promise.all(notifications);
+  console.log('✅ Notifications created');
+
+  // Create Announcements
+  const announcements = [];
+  announcements.push(
+    prisma.announcement.create({
+      data: {
+        title: 'Ласкаво просимо на платформу VITA-Edu!',
+        content: 'Вітаємо всіх студентів на новому навчальному році. Бажаємо успіхів у навчанні!',
+        authorId: admin.id,
+        isPinned: true,
+      },
+    })
+  );
+  announcements.push(
+    prisma.announcement.create({
+      data: {
+        title: 'Важлива інформація про курси',
+        content: 'Нагадуємо, що всі курси доступні 24/7. Якщо виникли питання, звертайтесь до викладачів через систему повідомлень.',
+        authorId: admin.id,
+        isPinned: true,
+      },
+    })
+  );
+  announcements.push(
+    prisma.announcement.create({
+      data: {
+        title: 'Наступний урок: MongoDB та CRUD',
+        content: 'На наступному уроці вивчатимемо підключення MongoDB та реалізацію CRUD операцій. Підготуйте середовище розробки!',
+        courseId: fullStackCourse.id,
+        authorId: allTeachers[0].id,
+        isPinned: false,
+      },
+    })
+  );
+  announcements.push(
+    prisma.announcement.create({
+      data: {
+        title: 'Дедлайн завдання',
+        content: 'Нагадуємо про дедлайн завдання "React компонент ToDo" - 20 листопада 2024',
+        courseId: reactCourse.id,
+        authorId: allTeachers[1].id,
+        isPinned: false,
+      },
+    })
+  );
+  await Promise.all(announcements);
+  console.log('✅ Announcements created');
+
+  // Create Comments on lessons
+  const comments = [];
+  if (allLessons.length > 0) {
+    comments.push(
+      prisma.comment.create({
+        data: {
+          content: 'Чудовий урок! Дуже зрозуміло пояснено концепцію.',
+          lessonId: allLessons[0].id,
+          userId: allStudents[0].id,
+        },
+      })
+    );
+    comments.push(
+      prisma.comment.create({
+        data: {
+          content: 'Дякую за детальне пояснення. Тепер все зрозуміло!',
+          lessonId: allLessons[0].id,
+          userId: allStudents[1].id,
+        },
+      })
+    );
+    // Reply to comment
+    const parentComment = await prisma.comment.create({
+      data: {
+        content: 'Чи можна отримати більше прикладів?',
+        lessonId: allLessons[1].id,
+        userId: allStudents[2].id,
+      },
+    });
+    comments.push(parentComment);
+    comments.push(
+      prisma.comment.create({
+        data: {
+          content: 'Так, звичайно! Додам більше прикладів у наступному уроці.',
+          lessonId: allLessons[1].id,
+          userId: allTeachers[0].id,
+          parentId: parentComment.id,
+        },
+      })
+    );
+  }
+  await Promise.all(comments);
+  console.log('✅ Comments created');
+
+  // Create Files
+  const files = [];
+  if (allLessons.length > 0) {
+    files.push(
+      prisma.file.create({
+        data: {
+          name: 'presentation-intro.pdf',
+          originalName: 'Вступ до Full-Stack.pdf',
+          mimeType: 'application/pdf',
+          size: 2048576,
+          url: '/uploads/courses/fullstack-mern/presentation-intro.pdf',
+          courseId: fullStackCourse.id,
+          uploaderId: allTeachers[0].id,
+        },
+      })
+    );
+    files.push(
+      prisma.file.create({
+        data: {
+          name: 'code-examples.zip',
+          originalName: 'Приклади коду.zip',
+          mimeType: 'application/zip',
+          size: 512000,
+          url: '/uploads/courses/fullstack-mern/code-examples.zip',
+          courseId: fullStackCourse.id,
+          uploaderId: allTeachers[0].id,
+        },
+      })
+    );
+    files.push(
+      prisma.file.create({
+        data: {
+          name: 'lesson-1-notes.pdf',
+          originalName: 'Конспект уроку 1.pdf',
+          mimeType: 'application/pdf',
+          size: 1024000,
+          url: '/uploads/lessons/lesson-1-notes.pdf',
+          lessonId: allLessons[0].id,
+          uploaderId: allTeachers[0].id,
+        },
+      })
+    );
+  }
+  await Promise.all(files);
+  console.log('✅ Files created');
+
   console.log('✨ VITA-Edu database seeded successfully!');
   console.log('');
   console.log('📊 Summary:');
@@ -1559,6 +1988,15 @@ API підтримує:
   console.log('- 9 Lessons with content');
   console.log('- 3 Assignments');
   console.log('- 6 Submissions (with files and GitHub)');
+  console.log('- 6 Grades');
+  console.log('- 2 Quizzes with questions');
+  console.log('- 2 Quiz attempts');
+  console.log('- 10 Attendance records');
+  console.log('- 4 Messages (private and course)');
+  console.log('- 7 Notifications');
+  console.log('- 4 Announcements');
+  console.log('- 4 Comments (with replies)');
+  console.log('- 3 Files');
   console.log('');
   console.log('🔐 Test accounts (password: password123):');
   console.log('Admin: admin@vitaedu.com');

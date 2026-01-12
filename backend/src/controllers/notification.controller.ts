@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import prisma from '../config/database';
-import { AppError } from '../middleware/errorHandler';
+import { AppError } from '../utils/AppError';
 
 // Get user's notifications
 export const getMyNotifications = async (

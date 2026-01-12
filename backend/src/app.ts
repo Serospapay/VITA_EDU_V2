@@ -69,37 +69,28 @@ const swaggerDocs = swaggerJsDoc(swaggerOptions);
 // Security
 app.use(helmet());
 
-// CORS - Allow requests from localhost, local network, and public IPs
+// CORS - Allow requests ONLY from localhost (strict local mode)
 app.use(
   cors({
     origin: function (origin, callback) {
-      // Allow requests with no origin (mobile apps, Postman, etc.)
+      // Allow requests with no origin (Postman, curl, etc.)
       if (!origin) return callback(null, true);
       
-      // Allow localhost
+      // Allow ONLY localhost and 127.0.0.1
       if (origin.startsWith('http://localhost:') || origin.startsWith('http://127.0.0.1:')) {
         return callback(null, true);
       }
       
-      // Allow local network IPs (192.168.x.x, 10.x.x.x, 172.x.x.x)
-      const localNetworkPattern = /^http:\/\/(192\.168\.|10\.|172\.(1[6-9]|2[0-9]|3[01])\.)/;
-      if (localNetworkPattern.test(origin)) {
-        return callback(null, true);
+      // Allow configured CORS origin if it's localhost
+      const corsOrigin = process.env.CORS_ORIGIN || process.env.FRONTEND_URL;
+      if (corsOrigin && (corsOrigin.includes('localhost') || corsOrigin.includes('127.0.0.1'))) {
+        if (origin === corsOrigin) {
+          return callback(null, true);
+        }
       }
       
-      // Allow public IPs on specific ports (3000 for frontend, 5000 for API docs)
-      // This allows access from any public IP:port combination
-      const publicIPPattern = /^http:\/\/(\d{1,3}\.){3}\d{1,3}:(3000|5000)$/;
-      if (publicIPPattern.test(origin)) {
-        return callback(null, true);
-      }
-      
-      // Allow configured CORS origin
-      if (origin === process.env.CORS_ORIGIN) {
-        return callback(null, true);
-      }
-      
-      callback(new Error('Not allowed by CORS'));
+      // Reject all other origins (local network and public IPs)
+      callback(null, false);
     },
     credentials: true,
   })
@@ -150,13 +141,29 @@ app.get('/health', async (_req: Request, res: Response) => {
       },
     });
   } catch (error) {
-    res.status(503).json({
-      status: 'ERROR',
-      timestamp: new Date().toISOString(),
-      uptime: process.uptime(),
-      database: 'disconnected',
-      error: error instanceof Error ? error.message : 'Unknown error',
-    });
+    // Try to reconnect
+    try {
+      await prisma.$connect();
+      await prisma.$queryRaw`SELECT 1`;
+      res.status(200).json({
+        status: 'OK',
+        timestamp: new Date().toISOString(),
+        uptime: process.uptime(),
+        database: 'reconnected',
+        memory: {
+          used: Math.round(process.memoryUsage().heapUsed / 1024 / 1024) + ' MB',
+          total: Math.round(process.memoryUsage().heapTotal / 1024 / 1024) + ' MB',
+        },
+      });
+    } catch (reconnectError) {
+      res.status(503).json({
+        status: 'ERROR',
+        timestamp: new Date().toISOString(),
+        uptime: process.uptime(),
+        database: 'disconnected',
+        error: reconnectError instanceof Error ? reconnectError.message : 'Unknown error',
+      });
+    }
   }
 });
 

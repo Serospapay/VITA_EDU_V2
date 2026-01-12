@@ -16,28 +16,20 @@ export const initializeSocket = (httpServer: HTTPServer) => {
         // Allow requests with no origin
         if (!origin) return callback(null, true);
         
-        // Allow localhost
+        // Allow ONLY localhost and 127.0.0.1 (strict local mode)
         if (origin.startsWith('http://localhost:') || origin.startsWith('http://127.0.0.1:')) {
           return callback(null, true);
         }
         
-        // Allow local network IPs
-        const localNetworkPattern = /^http:\/\/(192\.168\.|10\.|172\.(1[6-9]|2[0-9]|3[01])\.)/;
-        if (localNetworkPattern.test(origin)) {
-          return callback(null, true);
+        // Allow configured origin if it's localhost
+        const corsOrigin = process.env.CORS_ORIGIN || process.env.FRONTEND_URL;
+        if (corsOrigin && (corsOrigin.includes('localhost') || corsOrigin.includes('127.0.0.1'))) {
+          if (origin === corsOrigin) {
+            return callback(null, true);
+          }
         }
         
-        // Allow public IPs on specific ports (3000 for frontend, 5000 for API docs)
-        const publicIPPattern = /^http:\/\/(\d{1,3}\.){3}\d{1,3}:(3000|5000)$/;
-        if (publicIPPattern.test(origin)) {
-          return callback(null, true);
-        }
-        
-        // Allow configured origin
-        if (origin === process.env.CORS_ORIGIN || origin === process.env.FRONTEND_URL) {
-          return callback(null, true);
-        }
-        
+        // Reject all other origins (local network and public IPs)
         callback(new Error('Not allowed by CORS'));
       },
       credentials: true,
@@ -88,10 +80,21 @@ export const initializeSocket = (httpServer: HTTPServer) => {
     }) => {
       try {
         // Verify user has access to this course
-        const course = await prisma.course.findUnique({
-          where: { id: data.courseId },
-          select: { teacherId: true },
-        });
+        let course;
+        try {
+          course = await prisma.course.findUnique({
+            where: { id: data.courseId },
+            select: { teacherId: true },
+          });
+        } catch (dbError: any) {
+          // Handle database connection errors
+          if (dbError.code === 'P1001' || dbError.code === 'P1002' || dbError.code === 'P1003') {
+            logger.error('Database connection error in socket handler:', dbError);
+            socket.emit('error', { message: 'Database connection lost. Please try again.' });
+            return;
+          }
+          throw dbError;
+        }
 
         if (!course) {
           socket.emit('error', { message: 'Course not found' });
@@ -99,14 +102,24 @@ export const initializeSocket = (httpServer: HTTPServer) => {
         }
 
         const isTeacher = course.teacherId === socket.userId;
-        const isEnrolled = await prisma.enrollment.findUnique({
-          where: {
-            userId_courseId: {
-              userId: socket.userId!,
-              courseId: data.courseId,
+        let isEnrolled;
+        try {
+          isEnrolled = await prisma.enrollment.findUnique({
+            where: {
+              userId_courseId: {
+                userId: socket.userId!,
+                courseId: data.courseId,
+              },
             },
-          },
-        });
+          });
+        } catch (dbError: any) {
+          if (dbError.code === 'P1001' || dbError.code === 'P1002' || dbError.code === 'P1003') {
+            logger.error('Database connection error in socket handler:', dbError);
+            socket.emit('error', { message: 'Database connection lost. Please try again.' });
+            return;
+          }
+          throw dbError;
+        }
 
         if (!isTeacher && !isEnrolled) {
           socket.emit('error', { message: 'Access denied' });
@@ -114,16 +127,26 @@ export const initializeSocket = (httpServer: HTTPServer) => {
         }
 
         // Get sender info
-        const sender = await prisma.user.findUnique({
-          where: { id: socket.userId! },
-          select: {
-            id: true,
-            firstName: true,
-            lastName: true,
-            avatar: true,
-            role: true,
-          },
-        });
+        let sender;
+        try {
+          sender = await prisma.user.findUnique({
+            where: { id: socket.userId! },
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              avatar: true,
+              role: true,
+            },
+          });
+        } catch (dbError: any) {
+          if (dbError.code === 'P1001' || dbError.code === 'P1002' || dbError.code === 'P1003') {
+            logger.error('Database connection error in socket handler:', dbError);
+            socket.emit('error', { message: 'Database connection lost. Please try again.' });
+            return;
+          }
+          throw dbError;
+        }
 
         if (!sender) {
           socket.emit('error', { message: 'User not found' });
@@ -131,14 +154,24 @@ export const initializeSocket = (httpServer: HTTPServer) => {
         }
 
         // Save message to database
-        const message = await prisma.message.create({
-          data: {
-            content: data.content.trim(),
-            senderId: socket.userId!,
-            courseId: data.courseId,
-            isRead: false,
-          },
-        });
+        let message;
+        try {
+          message = await prisma.message.create({
+            data: {
+              content: data.content.trim(),
+              senderId: socket.userId!,
+              courseId: data.courseId,
+              isRead: false,
+            },
+          });
+        } catch (dbError: any) {
+          if (dbError.code === 'P1001' || dbError.code === 'P1002' || dbError.code === 'P1003') {
+            logger.error('Database connection error in socket handler:', dbError);
+            socket.emit('error', { message: 'Database connection lost. Please try again.' });
+            return;
+          }
+          throw dbError;
+        }
 
         // Emit to all users in course room
         const messageData = {
@@ -152,7 +185,11 @@ export const initializeSocket = (httpServer: HTTPServer) => {
         socket.emit('course:message:sent', messageData);
       } catch (error) {
         logger.error('Error sending course message:', error);
-        socket.emit('error', { message: 'Failed to send message' });
+        socket.emit('error', { 
+          message: error instanceof Error && error.message.includes('P1001') 
+            ? 'Database connection lost. Please try again.' 
+            : 'Failed to send message' 
+        });
       }
     });
 

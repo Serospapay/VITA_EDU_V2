@@ -58,8 +58,10 @@ echo ✓ Frontend compiled to: frontend\dist\
 echo.
 echo Next steps:
 echo   1. Start backend: cd backend ^&^& npm start
-echo   3. Serve frontend: cd frontend ^&^& npm run preview
-echo   4. Access at: http://188.191.236.83:5000
+echo   2. Serve frontend: cd frontend ^&^& npm run preview
+echo   3. Access at: http://localhost:3000
+echo.
+echo Note: Update CORS_ORIGIN and FRONTEND_URL in .env for production
 echo ========================================
 echo.
 pause

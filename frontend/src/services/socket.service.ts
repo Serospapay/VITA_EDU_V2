@@ -1,4 +1,5 @@
 import { io, Socket } from 'socket.io-client';
+import { logger } from '../utils/logger';
 
 // Get socket URL from environment
 // @ts-ignore - Vite environment variables
@@ -24,15 +25,15 @@ class SocketService {
     });
 
     this.socket.on('connect', () => {
-      console.log('✅ WebSocket connected');
+      logger.info('✅ WebSocket connected');
     });
 
     this.socket.on('disconnect', () => {
-      console.log('❌ WebSocket disconnected');
+      logger.info('❌ WebSocket disconnected');
     });
 
     this.socket.on('error', (error) => {
-      console.error('WebSocket error:', error);
+      logger.error('WebSocket error:', error);
     });
   }
 

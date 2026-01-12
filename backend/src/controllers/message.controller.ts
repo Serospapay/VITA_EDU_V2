@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
+import { Prisma } from '@prisma/client';
 import prisma from '../config/database';
-import { AppError } from '../middleware/errorHandler';
+import { AppError } from '../utils/AppError';
 
 // Get messages for a course chat
 export const getCourseMessages = async (
@@ -41,7 +42,7 @@ export const getCourseMessages = async (
     }
 
     // Build query
-    const where: any = {
+    const where: Prisma.MessageWhereInput = {
       courseId,
     };
 

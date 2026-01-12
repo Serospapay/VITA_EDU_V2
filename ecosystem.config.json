@@ -1,0 +1,36 @@
+﻿{
+    "apps":  [
+                 {
+                     "args":  "run dev",
+                     "out_file":  "C:\\Users\\Seros\\Desktop\\DP\\1\\backend\\logs\\pm2-out.log",
+                     "max_memory_restart":  "1G",
+                     "cwd":  "C:\\Users\\Seros\\Desktop\\DP\\1\\backend",
+                     "instances":  1,
+                     "error_file":  "C:\\Users\\Seros\\Desktop\\DP\\1\\backend\\logs\\pm2-error.log",
+                     "log_date_format":  "YYYY-MM-DD HH:mm:ss Z",
+                     "watch":  false,
+                     "name":  "vita-edu-backend",
+                     "autorestart":  true,
+                     "script":  "npm",
+                     "env":  {
+                                 "NODE_ENV":  "development"
+                             }
+                 },
+                 {
+                     "args":  "run dev",
+                     "out_file":  "C:\\Users\\Seros\\Desktop\\DP\\1\\frontend\\logs\\pm2-out.log",
+                     "max_memory_restart":  "500M",
+                     "cwd":  "C:\\Users\\Seros\\Desktop\\DP\\1\\frontend",
+                     "instances":  1,
+                     "error_file":  "C:\\Users\\Seros\\Desktop\\DP\\1\\frontend\\logs\\pm2-error.log",
+                     "log_date_format":  "YYYY-MM-DD HH:mm:ss Z",
+                     "watch":  false,
+                     "name":  "vita-edu-frontend",
+                     "autorestart":  true,
+                     "script":  "npm",
+                     "env":  {
+                                 "NODE_ENV":  "development"
+                             }
+                 }
+             ]
+}

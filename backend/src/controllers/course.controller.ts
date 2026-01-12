@@ -1,6 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
+import { Prisma } from '@prisma/client';
 import prisma from '../config/database';
-import { AppError } from '../middleware/errorHandler';
+import { AppError } from '../utils/AppError';
+import { logger } from '../utils/logger';
+import { cache } from '../utils/cache';
 
 // Get all courses
 export const getCourses = async (
@@ -21,16 +24,35 @@ export const getCourses = async (
     const skip = (Number(page) - 1) * Number(limit);
     const take = Number(limit);
 
-    const where: any = {};
+    const where: Prisma.CourseWhereInput = {};
 
-    if (status) where.status = status;
-    if (level) where.level = level;
-    if (categoryId) where.categoryId = categoryId;
+    if (status) where.status = status as Prisma.EnumCourseStatusFilter<'Course'>;
+    if (level) where.level = level as Prisma.EnumCourseLevelFilter<'Course'>;
+    if (categoryId) where.categoryId = categoryId as string;
     if (search) {
       where.OR = [
         { title: { contains: search as string, mode: 'insensitive' } },
         { description: { contains: search as string, mode: 'insensitive' } },
       ];
+    }
+
+    // Try cache first (only for published courses without search)
+    const cacheKey = `courses:${status || 'all'}:${level || 'all'}:${categoryId || 'all'}:${page}:${limit}`;
+    const cachedResult = search ? null : await cache.get<{ courses: unknown[]; total: number }>(cacheKey);
+    
+    if (cachedResult) {
+      return res.status(200).json({
+        success: true,
+        data: {
+          courses: cachedResult.courses,
+          pagination: {
+            total: cachedResult.total,
+            page: Number(page),
+            limit: Number(limit),
+            pages: Math.ceil(cachedResult.total / Number(limit)),
+          },
+        },
+      });
     }
 
     const [courses, total] = await Promise.all([
@@ -66,7 +88,12 @@ export const getCourses = async (
       prisma.course.count({ where }),
     ]);
 
-    res.status(200).json({
+    // Cache result (only for published courses without search)
+    if (!search) {
+      await cache.set(cacheKey, { courses, total }, { ttl: 300 }); // 5 minutes
+    }
+
+    return res.status(200).json({
       success: true,
       data: {
         courses,
@@ -79,7 +106,8 @@ export const getCourses = async (
       },
     });
   } catch (error) {
-    next(error);
+    logger.error('Error in getCourses:', error);
+    return next(error);
   }
 };
 
@@ -139,6 +167,7 @@ export const getCourse = async (
       data: course,
     });
   } catch (error) {
+    logger.error('Error in getCourses:', error);
     next(error);
   }
 };
@@ -209,6 +238,7 @@ export const createCourse = async (
       data: course,
     });
   } catch (error) {
+    logger.error('Error in getCourses:', error);
     next(error);
   }
 };
@@ -263,6 +293,7 @@ export const updateCourse = async (
       data: course,
     });
   } catch (error) {
+    logger.error('Error in getCourses:', error);
     next(error);
   }
 };
@@ -301,6 +332,7 @@ export const deleteCourse = async (
       message: 'Course deleted successfully',
     });
   } catch (error) {
+    logger.error('Error in getCourses:', error);
     next(error);
   }
 };
@@ -333,6 +365,7 @@ export const getTeacherCourses = async (
       data: courses,
     });
   } catch (error) {
+    logger.error('Error in getCourses:', error);
     next(error);
   }
 };
@@ -367,6 +400,7 @@ export const getCourseStudents = async (
       data: enrollments,
     });
   } catch (error) {
+    logger.error('Error in getCourses:', error);
     next(error);
   }
 };

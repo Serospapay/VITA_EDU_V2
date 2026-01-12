@@ -152,10 +152,10 @@ Open: http://localhost:3000
 
 ## Documentation
 
-- **[QUICK_START.md](QUICK_START.md)** — Detailed setup instructions
-- **[QUICK_START_PRODUCTION.md](QUICK_START_PRODUCTION.md)** — Production deployment guide
-- **[RESEED.md](RESEED.md)** — Database seeding guide
-- **[GITHUB_SETUP.md](GITHUB_SETUP.md)** — GitHub repository setup guide
+- **[SETUP_NEW_PC.md](SETUP_NEW_PC.md)** — Detailed setup instructions for new PC
+- **[DEPLOYMENT.md](DEPLOYMENT.md)** — Production deployment guide (Railway)
+- **[STABLE_SERVER_SETUP.md](STABLE_SERVER_SETUP.md)** — Stable server setup with PM2
+- **[LOCAL_SERVER_SETUP.md](LOCAL_SERVER_SETUP.md)** — Local server setup for network access
 
 ---
 
@@ -277,7 +277,7 @@ MIT License
 
 ---
 
-**Questions? See [QUICK_START.md](QUICK_START.md)**
+**Questions? See [SETUP_NEW_PC.md](SETUP_NEW_PC.md)**
 
 
 
