@@ -25,6 +25,10 @@
 
 Enter PostgreSQL password and wait 5-10 minutes.
 
+### Database backup and moving to another machine
+
+Instructions (Ukrainian) and scripts: **[`database-transfer/README.uk.md`](database-transfer/README.uk.md)** — резерв PostgreSQL та архів файлів із `backend/uploads`.
+
 ---
 
 ### Daily Launch
