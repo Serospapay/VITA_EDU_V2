@@ -8,7 +8,16 @@ interface UiState {
 const getInitialTheme = (): 'light' | 'dark' => {
   try {
     const saved = localStorage.getItem('theme');
-    return (saved === 'dark' ? 'dark' : 'light');
+    const theme = saved === 'dark' ? 'dark' : 'light';
+    // Встановлюємо клас одразу при ініціалізації
+    if (typeof document !== 'undefined') {
+      if (theme === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    }
+    return theme;
   } catch {
     return 'light';
   }

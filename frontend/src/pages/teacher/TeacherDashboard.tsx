@@ -181,10 +181,10 @@ const TeacherDashboard = () => {
     <div className="space-y-8">
       {/* Header */}
       <div>
-        <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-400 via-pink-500 to-purple-600 bg-clip-text text-transparent mb-2">
+        <h1 className="dash-page-title-accent mb-2">
           Вітаємо, {user?.firstName}!
         </h1>
-        <p className="text-gray-400">Огляд вашої викладацької діяльності</p>
+        <p className="dash-muted">Огляд вашої викладацької діяльності</p>
       </div>
 
       {/* Quick Stats */}
@@ -200,7 +200,7 @@ const TeacherDashboard = () => {
               </div>
               <span className="text-3xl font-bold text-purple-400">{stats.totalCourses}</span>
             </div>
-            <h3 className="text-gray-400 text-sm font-medium">Ваших курсів</h3>
+            <h3 className="dash-muted text-sm font-medium">Ваших курсів</h3>
           </div>
         </div>
 
@@ -215,7 +215,7 @@ const TeacherDashboard = () => {
               </div>
               <span className="text-3xl font-bold text-blue-400">{stats.totalStudents}</span>
             </div>
-            <h3 className="text-gray-400 text-sm font-medium">Студентів</h3>
+            <h3 className="dash-muted text-sm font-medium">Студентів</h3>
           </div>
         </div>
 
@@ -230,7 +230,7 @@ const TeacherDashboard = () => {
               </div>
               <span className="text-3xl font-bold text-green-400">{stats.totalLessons}</span>
             </div>
-            <h3 className="text-gray-400 text-sm font-medium">Уроків створено</h3>
+            <h3 className="dash-muted text-sm font-medium">Уроків створено</h3>
           </div>
         </div>
 
@@ -245,7 +245,7 @@ const TeacherDashboard = () => {
               </div>
               <span className="text-3xl font-bold text-orange-400">{stats.averageProgress.toFixed(0)}%</span>
             </div>
-            <h3 className="text-gray-400 text-sm font-medium">Середній прогрес</h3>
+            <h3 className="dash-muted text-sm font-medium">Середній прогрес</h3>
           </div>
         </div>
 
@@ -260,7 +260,7 @@ const TeacherDashboard = () => {
               </div>
               <span className="text-3xl font-bold text-pink-400">{stats.totalAssignments}</span>
             </div>
-            <h3 className="text-gray-400 text-sm font-medium">Завдань створено</h3>
+            <h3 className="dash-muted text-sm font-medium">Завдань створено</h3>
           </div>
         </div>
 
@@ -275,14 +275,14 @@ const TeacherDashboard = () => {
               </div>
               <span className="text-3xl font-bold text-red-400">{stats.pendingSubmissions}</span>
             </div>
-            <h3 className="text-gray-400 text-sm font-medium">На перевірку</h3>
+            <h3 className="dash-muted text-sm font-medium">На перевірку</h3>
           </div>
         </div>
       </div>
 
       {/* Quick Actions */}
       <div>
-        <h2 className="text-2xl font-bold text-white mb-4">Швидкі дії</h2>
+        <h2 className="text-2xl font-bold dash-fg mb-4">Швидкі дії</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <Link
             to="/teacher/courses"
@@ -391,7 +391,7 @@ const TeacherDashboard = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
               <h3 className="text-xl font-bold mb-2">На перевірку</h3>
-              <p className="text-yellow-100 text-sm">Непер евірені завдання студентів</p>
+              <p className="text-yellow-100 text-sm">Неперевірені завдання студентів</p>
               <div className="mt-4 inline-flex items-center text-sm font-medium">
                 Перевірити <span className="ml-2">→</span>
               </div>
@@ -403,7 +403,7 @@ const TeacherDashboard = () => {
       {/* Top Courses */}
       {topCourses.length > 0 && (
         <div>
-          <h2 className="text-2xl font-bold text-white mb-4">Топ курси за кількістю студентів</h2>
+          <h2 className="text-2xl font-bold dash-fg mb-4">Топ курси за кількістю студентів</h2>
           <div className="grid gap-4">
             {topCourses.map((course, index) => {
               const avgProgress = course.enrollments && course.enrollments.length > 0
@@ -414,21 +414,21 @@ const TeacherDashboard = () => {
                 <Link
                   key={course.id}
                   to={`/teacher/courses/${course.id}/edit`}
-                  className="glass p-6 rounded-2xl border border-gray-700 hover:border-purple-500/50 transition group"
+                  className="glass p-6 rounded-2xl dash-bordered hover:border-purple-500/50 transition group"
                 >
                   <div className="flex items-center gap-4">
                     <div className={`w-12 h-12 rounded-full flex items-center justify-center text-2xl font-bold ${
                       index === 0 ? 'bg-yellow-500/20 text-yellow-400' :
-                      index === 1 ? 'bg-gray-400/20 text-gray-400' :
+                      index === 1 ? 'bg-slate-300/40 text-slate-600 dark:bg-gray-400/20 dark:text-gray-400' :
                       'bg-orange-500/20 text-orange-400'
                     }`}>
                       {index + 1}
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-lg font-bold text-white group-hover:text-purple-400 transition">
+                      <h3 className="text-lg font-bold dash-fg group-hover:text-purple-600 dark:group-hover:text-purple-400 transition">
                         {course.title}
                       </h3>
-                      <div className="flex items-center gap-4 mt-2 text-sm text-gray-400">
+                      <div className="flex items-center gap-4 mt-2 text-sm dash-muted">
                         <span className="flex items-center gap-1">
                           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
@@ -445,7 +445,7 @@ const TeacherDashboard = () => {
                     </div>
                     <div className="text-right">
                       <div className="text-2xl font-bold text-purple-400">{avgProgress.toFixed(0)}%</div>
-                      <div className="text-xs text-gray-500">Середній прогрес</div>
+                      <div className="text-xs dash-muted-weak">Середній прогрес</div>
                     </div>
                   </div>
                 </Link>
@@ -458,7 +458,7 @@ const TeacherDashboard = () => {
       {/* Courses that need attention */}
       {needsAttention.length > 0 && (
         <div>
-          <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
+          <h2 className="text-2xl font-bold dash-fg mb-4 flex items-center gap-2">
             <svg className="w-6 h-6 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
             </svg>
@@ -483,14 +483,14 @@ const TeacherDashboard = () => {
                       </svg>
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-lg font-bold text-white">{course.title}</h3>
+                      <h3 className="text-lg font-bold dash-fg">{course.title}</h3>
                       <p className="text-sm text-yellow-400 mt-1">
                         Низький середній прогрес студентів
                       </p>
                     </div>
                     <div className="text-right">
                       <div className="text-2xl font-bold text-yellow-400">{avgProgress.toFixed(0)}%</div>
-                      <div className="text-xs text-gray-500">{course._count.enrollments} студентів</div>
+                      <div className="text-xs dash-muted-weak">{course._count.enrollments} студентів</div>
                     </div>
                   </div>
                 </Link>
@@ -502,12 +502,12 @@ const TeacherDashboard = () => {
 
       {/* Empty State */}
       {courses.length === 0 && (
-        <div className="glass p-12 rounded-2xl text-center border border-gray-700">
-          <svg className="w-20 h-20 mx-auto mb-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="glass p-12 rounded-2xl text-center dash-bordered">
+          <svg className="w-20 h-20 mx-auto mb-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
           </svg>
-          <h3 className="text-xl font-semibold text-white mb-2">Ще немає курсів</h3>
-          <p className="text-gray-400 mb-6">Зверніться до адміністратора для призначення курсів</p>
+          <h3 className="text-xl font-semibold dash-fg mb-2">Ще немає курсів</h3>
+          <p className="dash-muted mb-6">Зверніться до адміністратора для призначення курсів</p>
         </div>
       )}
 
@@ -522,7 +522,7 @@ const TeacherDashboard = () => {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-white">
+              <h2 className="text-2xl font-bold dash-fg">
                 {selectorAction === 'lesson' 
                   ? 'Оберіть курс для додавання уроку' 
                   : selectorAction === 'assignment'
@@ -530,10 +530,12 @@ const TeacherDashboard = () => {
                   : 'Оберіть курс для перегляду аналітики'}
               </h2>
               <button
+                type="button"
                 onClick={() => setShowCourseSelector(false)}
-                className="p-2 hover:bg-gray-700 rounded-lg transition"
+                className="p-2 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg transition"
+                aria-label="Закрити"
               >
-                <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-6 h-6 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
@@ -549,7 +551,7 @@ const TeacherDashboard = () => {
                   <button
                     key={course.id}
                     onClick={() => handleCourseSelect(course.id)}
-                    className="w-full glass p-6 rounded-xl border border-gray-700 hover:border-purple-500/50 transition group text-left"
+                    className="w-full glass p-6 rounded-xl dash-bordered hover:border-purple-500/50 transition group text-left"
                   >
                     <div className="flex items-center gap-4">
                       {course.thumbnail ? (
@@ -566,10 +568,10 @@ const TeacherDashboard = () => {
                         </div>
                       )}
                       <div className="flex-1">
-                        <h3 className="text-lg font-bold text-white group-hover:text-purple-400 transition mb-2">
+                        <h3 className="text-lg font-bold dash-fg group-hover:text-purple-600 dark:group-hover:text-purple-400 transition mb-2">
                           {course.title}
                         </h3>
-                        <div className="flex items-center gap-4 text-sm text-gray-400">
+                        <div className="flex items-center gap-4 text-sm dash-muted">
                           <span className="flex items-center gap-1">
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />

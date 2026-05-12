@@ -28,9 +28,12 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
             position="top-right"
             toastOptions={{
               duration: 3000,
+              className: 'toast-wrapper',
               style: {
-                background: '#363636',
-                color: '#fff',
+                background: 'var(--toast-bg)',
+                color: 'var(--toast-color)',
+                border: 'var(--toast-border)',
+                boxShadow: 'var(--toast-shadow)',
               },
               success: {
                 duration: 3000,

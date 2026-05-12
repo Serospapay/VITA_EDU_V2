@@ -106,7 +106,7 @@ const CourseDetailPage = () => {
   if (loading) {
     return (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="text-center text-gray-400">Завантаження...</div>
+        <div className="text-center text-gray-700 dark:text-gray-400">Завантаження...</div>
       </div>
     );
   }
@@ -115,7 +115,7 @@ const CourseDetailPage = () => {
     return (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="glass p-8 rounded-2xl text-center">
-          <p className="text-gray-400 mb-4">Курс не знайдено</p>
+          <p className="text-gray-700 dark:text-gray-400 mb-4">Курс не знайдено</p>
           <Link to="/courses" className="btn btn-primary">
             Повернутись до курсів
           </Link>
@@ -129,7 +129,7 @@ const CourseDetailPage = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       {/* Header */}
-      <div className="glass p-8 rounded-2xl mb-8">
+      <div className="glass p-8 rounded-2xl mb-8 border border-gray-200 dark:border-transparent">
         <div className="grid md:grid-cols-2 gap-8">
           {/* Left: Course Info */}
           <div>
@@ -142,7 +142,7 @@ const CourseDetailPage = () => {
                   {course.category.name}
                 </span>
               )}
-              <span className="badge bg-gray-700 text-white text-xs px-3 py-1 rounded-full">
+              <span className="badge bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white text-xs px-3 py-1 rounded-full">
                 {course.level}
               </span>
             </div>
@@ -151,7 +151,7 @@ const CourseDetailPage = () => {
               {course.title}
             </h1>
 
-            <p className="text-gray-300 mb-6">{course.description}</p>
+            <p className="text-gray-700 dark:text-gray-300 mb-6 leading-relaxed">{course.description}</p>
 
             <div className="flex items-center gap-4 mb-6">
               {course.teacher.avatar && (
@@ -162,34 +162,34 @@ const CourseDetailPage = () => {
                 />
               )}
               <div>
-                <p className="text-sm text-gray-400">Викладач</p>
-                <p className="font-semibold text-white">
+                <p className="text-sm text-gray-600 dark:text-gray-400">Викладач</p>
+                <p className="font-semibold text-gray-900 dark:text-white">
                   {course.teacher.firstName} {course.teacher.lastName}
                 </p>
               </div>
             </div>
 
             {course.teacher.bio && (
-              <p className="text-sm text-gray-400 mb-6">{course.teacher.bio}</p>
+              <p className="text-sm text-gray-700 dark:text-gray-400 mb-6 leading-relaxed">{course.teacher.bio}</p>
             )}
 
             <div className="grid grid-cols-3 gap-4 mb-6">
-              <div className="text-center p-4 bg-gray-800/50 rounded-xl">
-                <p className="text-2xl font-bold text-purple-400">{course.lessons.length}</p>
-                <p className="text-xs text-gray-400">Уроків</p>
+              <div className="text-center p-4 bg-gray-100 dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-transparent">
+                <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">{course.lessons.length}</p>
+                <p className="text-xs text-gray-700 dark:text-gray-400 font-semibold">Уроків</p>
               </div>
-              <div className="text-center p-4 bg-gray-800/50 rounded-xl">
-                <p className="text-2xl font-bold text-yellow-400">{totalDuration}</p>
-                <p className="text-xs text-gray-400">Хвилин</p>
+              <div className="text-center p-4 bg-gray-100 dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-transparent">
+                <p className="text-2xl font-bold text-yellow-600 dark:text-yellow-400">{totalDuration}</p>
+                <p className="text-xs text-gray-700 dark:text-gray-400 font-semibold">Хвилин</p>
               </div>
-              <div className="text-center p-4 bg-gray-800/50 rounded-xl">
-                <p className="text-2xl font-bold text-green-400">{course._count.enrollments}</p>
-                <p className="text-xs text-gray-400">Студентів</p>
+              <div className="text-center p-4 bg-gray-100 dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-transparent">
+                <p className="text-2xl font-bold text-green-600 dark:text-green-400">{course._count.enrollments}</p>
+                <p className="text-xs text-gray-700 dark:text-gray-400 font-semibold">Студентів</p>
               </div>
             </div>
 
             {course.price !== undefined && (
-              <p className="text-3xl font-bold text-purple-400 mb-6">{course.price} ₴</p>
+              <p className="text-3xl font-bold text-purple-600 dark:text-purple-400 mb-6">{course.price} ₴</p>
             )}
 
             {/* Show enroll button for non-authenticated users and students */}
@@ -224,18 +224,18 @@ const CourseDetailPage = () => {
       </div>
 
       {/* Lessons List */}
-      <div className="glass p-8 rounded-2xl mb-8">
+      <div className="glass p-8 rounded-2xl mb-8 border border-gray-200 dark:border-transparent">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-white">Програма курсу</h2>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Програма курсу</h2>
           {!user && (
-            <span className="text-sm text-gray-400">
+            <span className="text-sm text-gray-700 dark:text-gray-400">
               Зареєструйтесь для доступу до уроків
             </span>
           )}
         </div>
 
         {course.lessons.length === 0 ? (
-          <p className="text-gray-400">Уроки ще не додані</p>
+          <p className="text-gray-700 dark:text-gray-400">Уроки ще не додані</p>
         ) : (
           <div className="space-y-3">
             {course.lessons
@@ -247,14 +247,14 @@ const CourseDetailPage = () => {
                   <Link
                     key={lesson.id}
                     to={`/courses/${course.id}/lessons/${lesson.id}`}
-                    className="flex items-center justify-between p-4 bg-gray-800/50 rounded-xl transition hover:bg-gray-700/50 cursor-pointer"
+                    className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-transparent transition hover:bg-gray-100 dark:hover:bg-gray-700/50 cursor-pointer"
                   >
                     <div className="flex items-center gap-4">
-                      <div className="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center text-purple-400 font-bold">
+                      <div className="w-10 h-10 rounded-full bg-purple-100 dark:bg-purple-500/20 flex items-center justify-center text-purple-600 dark:text-purple-400 font-bold">
                         {index + 1}
                       </div>
                       <div>
-                        <h3 className="font-semibold text-white flex items-center gap-2">
+                        <h3 className="font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                           {lesson.title}
                           {!isAccessible && (
                             <svg className="w-4 h-4 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
@@ -262,7 +262,7 @@ const CourseDetailPage = () => {
                             </svg>
                           )}
                         </h3>
-                        <p className="text-sm text-gray-400">{lesson.duration} хв</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">{lesson.duration} хв</p>
                       </div>
                     </div>
 
@@ -277,20 +277,20 @@ const CourseDetailPage = () => {
                           Не опубліковано
                         </span>
                       )}
-                      <span className="text-purple-400">→</span>
+                      <span className="text-purple-600 dark:text-purple-400">→</span>
                     </div>
                   </Link>
                 ) : (
                   <div
                     key={lesson.id}
-                    className="flex items-center justify-between p-4 bg-gray-800/50 rounded-xl transition opacity-60 cursor-not-allowed"
+                    className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-transparent transition opacity-60 cursor-not-allowed"
                   >
                     <div className="flex items-center gap-4">
-                      <div className="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center text-purple-400 font-bold">
+                      <div className="w-10 h-10 rounded-full bg-purple-100 dark:bg-purple-500/20 flex items-center justify-center text-purple-600 dark:text-purple-400 font-bold">
                         {index + 1}
                       </div>
                       <div>
-                        <h4 className="font-semibold text-white">{lesson.title}</h4>
+                        <h4 className="font-semibold text-gray-900 dark:text-white">{lesson.title}</h4>
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
@@ -307,20 +307,20 @@ const CourseDetailPage = () => {
 
       {/* Additional Info */}
       <div className="grid md:grid-cols-2 gap-6">
-        <div className="glass p-6 rounded-2xl">
-          <h3 className="text-xl font-bold mb-4 text-white">📝 Завдання</h3>
-          <p className="text-3xl font-bold text-yellow-400 mb-2">
+        <div className="glass p-6 rounded-2xl border border-gray-200 dark:border-transparent">
+          <h3 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">📝 Завдання</h3>
+          <p className="text-3xl font-bold text-yellow-600 dark:text-yellow-400 mb-2">
             {course._count.assignments}
           </p>
-          <p className="text-sm text-gray-400">Практичних завдань для закріплення матеріалу</p>
+          <p className="text-sm text-gray-700 dark:text-gray-400">Практичних завдань для закріплення матеріалу</p>
         </div>
 
-        <div className="glass p-6 rounded-2xl">
-          <h3 className="text-xl font-bold mb-4 text-white">📊 Тести</h3>
-          <p className="text-3xl font-bold text-green-400 mb-2">
+        <div className="glass p-6 rounded-2xl border border-gray-200 dark:border-transparent">
+          <h3 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">📊 Тести</h3>
+          <p className="text-3xl font-bold text-green-600 dark:text-green-400 mb-2">
             {course._count.quizzes}
           </p>
-          <p className="text-sm text-gray-400">Тестів для перевірки знань</p>
+          <p className="text-sm text-gray-700 dark:text-gray-400">Тестів для перевірки знань</p>
         </div>
       </div>
     </div>

@@ -93,26 +93,26 @@ const HomePage = () => {
           <div className="floating-shape shape-2"></div>
           <div className="floating-shape shape-3"></div>
           {/* Additional gradient overlay for depth */}
-          <div className="absolute inset-0 bg-gradient-to-b from-purple-900/20 via-transparent to-indigo-900/20"></div>
+          <div className="absolute inset-0 bg-gradient-to-b from-purple-200/30 via-transparent to-indigo-200/30 dark:from-purple-900/20 dark:via-transparent dark:to-indigo-900/20"></div>
         </div>
 
-        {/* Grid pattern overlay */}
-        <div className="absolute inset-0 opacity-10" style={{
-          backgroundImage: 'linear-gradient(rgba(167, 139, 250, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(167, 139, 250, 0.1) 1px, transparent 1px)',
+          {/* Grid pattern overlay */}
+        <div className="absolute inset-0 opacity-[0.03] dark:opacity-10" style={{
+          backgroundImage: 'linear-gradient(rgba(139, 92, 246, 0.2) 1px, transparent 1px), linear-gradient(90deg, rgba(139, 92, 246, 0.2) 1px, transparent 1px)',
           backgroundSize: '50px 50px'
         }}></div>
 
         <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="mb-12 animate-fade-in">
             <h1 className="hero-title text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-black mb-6 leading-tight tracking-tight">
-              <span className="inline-block bg-gradient-to-r from-white via-purple-200 to-pink-200 bg-clip-text text-transparent drop-shadow-2xl">
+              <span className="inline-block bg-gradient-to-r from-purple-600 via-purple-700 to-pink-600 bg-clip-text text-transparent">
                 VITA-Edu
               </span>
             </h1>
-            <p className="hero-subtitle text-2xl sm:text-3xl md:text-4xl font-bold mb-6 bg-gradient-to-r from-purple-200 to-pink-200 bg-clip-text text-transparent">
+            <p className="hero-subtitle text-2xl sm:text-3xl md:text-4xl font-bold mb-6 text-gray-800 dark:text-white">
               Твій шлях у світ технологій
             </p>
-            <p className="hero-text text-lg sm:text-xl md:text-2xl max-w-3xl mx-auto leading-relaxed text-white/90">
+            <p className="hero-text text-lg sm:text-xl md:text-2xl max-w-3xl mx-auto leading-relaxed text-gray-700 dark:text-white/90">
               Професійна онлайн-платформа для навчання IT. Курси від практиків, 
               реальні проекти, сучасний стек технологій.
             </p>
@@ -141,37 +141,37 @@ const HomePage = () => {
           {/* Minimal Stats */}
           <div className="mt-16 sm:mt-20 flex flex-wrap items-center justify-center gap-8 md:gap-12 lg:gap-16 max-w-6xl mx-auto">
             <div className="text-center">
-              <div className="text-5xl sm:text-6xl md:text-7xl font-black mb-2 text-white">
+              <div className="text-5xl sm:text-6xl md:text-7xl font-black mb-2 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent dark:text-white">
                 {loading ? <span className="animate-pulse">...</span> : stats?.totalCourses || 0}
               </div>
-              <div className="text-sm sm:text-base text-white/60 font-medium">Активних курсів</div>
+              <div className="text-sm sm:text-base text-gray-700 dark:text-white/60 font-semibold">Активних курсів</div>
             </div>
             
-            <div className="hidden sm:block w-px h-16 bg-gradient-to-b from-transparent via-white/20 to-transparent"></div>
+            <div className="hidden sm:block w-px h-16 bg-gradient-to-b from-transparent via-gray-300 dark:via-white/20 to-transparent"></div>
             
             <div className="text-center">
-              <div className="text-5xl sm:text-6xl md:text-7xl font-black mb-2 text-white">
+              <div className="text-5xl sm:text-6xl md:text-7xl font-black mb-2 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent dark:text-white">
                 {loading ? <span className="animate-pulse">...</span> : stats?.totalTeachers || 0}
               </div>
-              <div className="text-sm sm:text-base text-white/60 font-medium">Викладачів</div>
+              <div className="text-sm sm:text-base text-gray-700 dark:text-white/60 font-semibold">Викладачів</div>
             </div>
             
-            <div className="hidden sm:block w-px h-16 bg-gradient-to-b from-transparent via-white/20 to-transparent"></div>
+            <div className="hidden sm:block w-px h-16 bg-gradient-to-b from-transparent via-gray-300 dark:via-white/20 to-transparent"></div>
             
             <div className="text-center">
-              <div className="text-5xl sm:text-6xl md:text-7xl font-black mb-2 text-white">
+              <div className="text-5xl sm:text-6xl md:text-7xl font-black mb-2 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent dark:text-white">
                 {loading ? <span className="animate-pulse">...</span> : stats?.totalLessons || 0}
               </div>
-              <div className="text-sm sm:text-base text-white/60 font-medium">Уроків</div>
+              <div className="text-sm sm:text-base text-gray-700 dark:text-white/60 font-semibold">Уроків</div>
             </div>
             
-            <div className="hidden md:block w-px h-16 bg-gradient-to-b from-transparent via-white/20 to-transparent"></div>
+            <div className="hidden md:block w-px h-16 bg-gradient-to-b from-transparent via-gray-300 dark:via-white/20 to-transparent"></div>
             
             <div className="text-center">
-              <div className="text-5xl sm:text-6xl md:text-7xl font-black mb-2 text-white">
+              <div className="text-5xl sm:text-6xl md:text-7xl font-black mb-2 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent dark:text-white">
                 {loading ? <span className="animate-pulse">...</span> : stats?.totalStudents || 0}
               </div>
-              <div className="text-sm sm:text-base text-white/60 font-medium">Студентів</div>
+              <div className="text-sm sm:text-base text-gray-700 dark:text-white/60 font-semibold">Студентів</div>
             </div>
           </div>
         </div>
@@ -184,7 +184,7 @@ const HomePage = () => {
 
       {/* Featured Courses Section */}
       {featuredCourses.length > 0 && (
-        <section className="py-20 sm:py-24 md:py-32 relative bg-gradient-to-b from-gray-900 via-[#0a0b14] to-[#0a0b14]">
+        <section className="py-20 sm:py-24 md:py-32 relative bg-white dark:bg-gradient-to-b dark:from-gray-900 dark:via-[#0a0b14] dark:to-[#0a0b14]">
           {/* Subtle background pattern */}
           <div className="absolute inset-0 opacity-5" style={{
             backgroundImage: 'radial-gradient(circle at 2px 2px, rgba(167,139,250,0.3) 1px, transparent 0)',
@@ -193,11 +193,11 @@ const HomePage = () => {
           
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12 sm:mb-16 animate-fade-in">
-              <div className="inline-flex items-center gap-2 mb-4 px-4 py-2 bg-purple-500/10 border border-purple-500/20 rounded-full">
-                <svg className="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+              <div className="inline-flex items-center gap-2 mb-4 px-4 py-2 bg-purple-50 dark:bg-purple-500/10 border border-purple-200 dark:border-purple-500/20 rounded-full">
+                <svg className="w-4 h-4 text-yellow-500 dark:text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                 </svg>
-                <span className="text-sm font-semibold text-purple-300">
+                <span className="text-sm font-semibold text-purple-700 dark:text-purple-300">
                   Топ курси
                 </span>
               </div>
@@ -214,7 +214,7 @@ const HomePage = () => {
                 <Link
                   key={course.id}
                   to={`/courses/${course.id}`}
-                  className="glass p-6 rounded-2xl hover:scale-[1.02] transition-all group border border-gray-700 hover:border-purple-500/50 hover:shadow-2xl hover:shadow-purple-500/20 animate-fade-in"
+                  className="glass p-6 rounded-2xl hover:scale-[1.02] transition-all group border border-gray-200 dark:border-gray-700 hover:border-purple-500/50 hover:shadow-2xl hover:shadow-purple-500/20 animate-fade-in"
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
                   {/* Image with overlay */}
@@ -250,26 +250,26 @@ const HomePage = () => {
                     {course.category && (
                       <span className="badge badge-primary text-xs px-3 py-1">{course.category.name}</span>
                     )}
-                    <span className="badge bg-gray-700/50 text-white text-xs px-3 py-1 border border-gray-600">
+                    <span className="badge bg-gray-100 dark:bg-gray-700/50 text-gray-700 dark:text-white text-xs px-3 py-1 border border-gray-300 dark:border-gray-600">
                       {course.level === 'BEGINNER' ? 'Початковий' : 
                        course.level === 'INTERMEDIATE' ? 'Середній' : 'Просунутий'}
                     </span>
                   </div>
 
-                  <h3 className="text-xl font-bold mb-2 text-white group-hover:text-purple-400 transition line-clamp-2 min-h-[3.5rem]">
+                  <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition line-clamp-2 min-h-[3.5rem]">
                     {course.title}
                   </h3>
-                  <p className="text-gray-400 mb-4 line-clamp-2 text-sm leading-relaxed">{course.description}</p>
+                  <p className="text-gray-600 dark:text-gray-400 mb-4 line-clamp-2 text-sm leading-relaxed">{course.description}</p>
                   
-                  <div className="flex items-center justify-between text-xs sm:text-sm text-gray-400 mb-4 pb-4 border-b border-gray-700/50">
+                  <div className="flex items-center justify-between text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-4 pb-4 border-b border-gray-200 dark:border-gray-700/50">
                     <span className="flex items-center gap-1.5">
-                      <svg className="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-4 h-4 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                       </svg>
                       {course.teacher.firstName} {course.teacher.lastName}
                     </span>
                     <span className="flex items-center gap-1.5">
-                      <svg className="w-4 h-4 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-4 h-4 text-pink-600 dark:text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                       </svg>
                       {course._count.enrollments || 0}
@@ -422,21 +422,21 @@ const HomePage = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 sm:py-24 md:py-32 relative bg-gradient-to-br from-purple-900 via-indigo-900 to-purple-900 overflow-hidden">
+      <section className="py-20 sm:py-24 md:py-32 relative bg-gradient-to-br from-purple-50 via-indigo-50 to-purple-50 dark:from-purple-900 dark:via-indigo-900 dark:to-purple-900 overflow-hidden">
         {/* Animated background elements */}
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-pink-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+          <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-200/30 dark:bg-purple-500/20 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-pink-200/30 dark:bg-pink-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
         </div>
         
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6 leading-tight">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 dark:text-white mb-6 leading-tight">
             Готовий розпочати свою{' '}
-            <span className="bg-gradient-to-r from-yellow-300 via-pink-300 to-purple-300 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 dark:from-yellow-300 dark:via-pink-300 dark:to-purple-300 bg-clip-text text-transparent">
               IT-кар'єру?
             </span>
           </h2>
-          <p className="text-lg sm:text-xl text-white/90 mb-10 leading-relaxed max-w-2xl mx-auto">
+          <p className="text-lg sm:text-xl text-gray-700 dark:text-white/90 mb-10 leading-relaxed max-w-2xl mx-auto">
             Приєднуйся до тисяч студентів, які вже навчаються на VITA-Edu та будують свою кар'єру в IT
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -464,7 +464,7 @@ const HomePage = () => {
           </div>
           
           {/* Trust indicators */}
-          <div className="mt-12 pt-8 border-t border-white/10 flex flex-wrap justify-center gap-6 sm:gap-8 text-sm text-white/70">
+          <div className="mt-12 pt-8 border-t border-gray-200 dark:border-white/10 flex flex-wrap justify-center gap-6 sm:gap-8 text-sm text-gray-600 dark:text-white/70">
             <div className="flex items-center gap-2">
               <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />

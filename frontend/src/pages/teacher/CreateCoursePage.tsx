@@ -165,7 +165,7 @@ const CreateCoursePage = () => {
         {/* Category & Level */}
         <div className="grid md:grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-gray-900 dark:text-gray-300 mb-2">
               Категорія *
             </label>
             <select
@@ -185,7 +185,7 @@ const CreateCoursePage = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-gray-900 dark:text-gray-300 mb-2">
               Рівень *
             </label>
             <select
@@ -205,7 +205,7 @@ const CreateCoursePage = () => {
         {/* Price & Duration & Max Students */}
         <div className="grid md:grid-cols-3 gap-6">
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-gray-900 dark:text-gray-300 mb-2">
               Ціна (₴)
             </label>
             <input
@@ -219,7 +219,7 @@ const CreateCoursePage = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-gray-900 dark:text-gray-300 mb-2">
               Тривалість (год)
             </label>
             <input
@@ -233,7 +233,7 @@ const CreateCoursePage = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-gray-900 dark:text-gray-300 mb-2">
               Макс. студентів
             </label>
             <input

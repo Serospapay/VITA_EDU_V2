@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useAppSelector } from '../../hooks/redux';
 import api from '../../services/api';
 import toast from 'react-hot-toast';
+import { CheckIcon, ClockIcon } from '@heroicons/react/24/solid';
 
 interface Assignment {
   id: string;
@@ -247,10 +248,10 @@ const GradebookPage = () => {
 
   const getScoreColor = (score: number, maxScore: number): string => {
     const percentage = (score / maxScore) * 100;
-    if (percentage >= 90) return 'text-green-400 bg-green-500/20';
-    if (percentage >= 75) return 'text-blue-400 bg-blue-500/20';
-    if (percentage >= 60) return 'text-yellow-400 bg-yellow-500/20';
-    return 'text-orange-400 bg-orange-500/20';
+    if (percentage >= 90) return 'text-emerald-800 bg-emerald-500/18 dark:text-green-400 dark:bg-green-500/20';
+    if (percentage >= 75) return 'text-sky-800 bg-sky-500/18 dark:text-blue-400 dark:bg-blue-500/20';
+    if (percentage >= 60) return 'text-amber-800 bg-amber-500/18 dark:text-yellow-400 dark:bg-yellow-500/20';
+    return 'text-orange-800 bg-orange-500/18 dark:text-orange-400 dark:bg-orange-500/20';
   };
 
   // Sort students
@@ -301,8 +302,8 @@ const GradebookPage = () => {
   if (loading && courses.length === 0) {
     return (
       <div>
-        <h1 className="text-3xl font-bold mb-8">Електронний журнал</h1>
-        <div className="text-center text-gray-400">Завантаження...</div>
+        <h1 className="text-3xl font-bold mb-8 dash-fg">Електронний журнал</h1>
+        <div className="text-center dash-muted">Завантаження...</div>
       </div>
     );
   }
@@ -310,9 +311,9 @@ const GradebookPage = () => {
   if (courses.length === 0) {
     return (
       <div>
-        <h1 className="text-3xl font-bold mb-8">Електронний журнал</h1>
-        <div className="glass p-12 rounded-2xl text-center">
-          <p className="text-gray-400">Немає доступних курсів</p>
+        <h1 className="text-3xl font-bold mb-8 dash-fg">Електронний журнал</h1>
+        <div className="glass p-12 rounded-2xl text-center dash-bordered">
+          <p className="dash-muted">Немає доступних курсів</p>
         </div>
       </div>
     );
@@ -323,14 +324,14 @@ const GradebookPage = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-400 via-pink-500 to-purple-600 bg-clip-text text-transparent mb-2">
+          <h1 className="dash-page-title-accent mb-2">
             Електронний журнал
           </h1>
-          <p className="text-gray-400">Оцінки та прогрес студентів</p>
+          <p className="dash-muted">Оцінки та прогрес студентів</p>
         </div>
         <button
           onClick={exportToCSV}
-          className="px-6 py-3 bg-green-600 hover:bg-green-500 text-white rounded-xl font-medium transition flex items-center gap-2"
+          className="px-6 py-3 bg-emerald-600 hover:bg-emerald-500 dark:bg-emerald-600 dark:hover:bg-emerald-500 text-white rounded-xl font-medium transition flex items-center gap-2"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -340,14 +341,15 @@ const GradebookPage = () => {
       </div>
 
       {/* Controls */}
-      <div className="glass p-6 rounded-2xl border border-gray-700">
+      <div className="glass p-6 rounded-2xl dash-bordered">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">Курс</label>
+            <label htmlFor="gb-course" className="block text-sm font-medium dash-muted mb-2">Курс</label>
             <select
+              id="gb-course"
               value={selectedCourse}
               onChange={(e) => setSelectedCourse(e.target.value)}
-              className="w-full px-4 py-2.5 bg-gray-800/50 border border-gray-600 rounded-xl text-white focus:border-purple-500 focus:outline-none transition"
+              className="dash-control"
             >
               {courses.map((course) => (
                 <option key={course.id} value={course.id}>
@@ -358,11 +360,12 @@ const GradebookPage = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">Фільтр завдань</label>
+            <label htmlFor="gb-task-filter" className="block text-sm font-medium dash-muted mb-2">Фільтр завдань</label>
             <select
+              id="gb-task-filter"
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value as any)}
-              className="w-full px-4 py-2.5 bg-gray-800/50 border border-gray-600 rounded-xl text-white focus:border-purple-500 focus:outline-none transition"
+              className="dash-control"
             >
               <option value="ALL">Всі завдання</option>
               <option value="PENDING">Тільки на перевірці</option>
@@ -372,11 +375,12 @@ const GradebookPage = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">Сортування</label>
+            <label htmlFor="gb-sort" className="block text-sm font-medium dash-muted mb-2">Сортування</label>
             <select
+              id="gb-sort"
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as any)}
-              className="w-full px-4 py-2.5 bg-gray-800/50 border border-gray-600 rounded-xl text-white focus:border-purple-500 focus:outline-none transition"
+              className="dash-control"
             >
               <option value="name">За прізвищем</option>
               <option value="avg">За середнім балом</option>
@@ -388,68 +392,68 @@ const GradebookPage = () => {
 
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="glass p-4 rounded-xl border border-gray-700">
+        <div className="glass p-4 rounded-xl dash-bordered">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-blue-500/20 rounded-lg">
-              <svg className="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="p-2 bg-blue-500/15 dark:bg-blue-500/20 rounded-lg">
+              <svg className="w-6 h-6 text-blue-700 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
               </svg>
             </div>
             <div>
-              <p className="text-2xl font-bold text-white">{students.length}</p>
-              <p className="text-xs text-gray-500">Студентів</p>
+              <p className="text-2xl font-bold dash-fg">{students.length}</p>
+              <p className="text-xs dash-muted-weak">Студентів</p>
             </div>
           </div>
         </div>
 
-        <div className="glass p-4 rounded-xl border border-gray-700">
+        <div className="glass p-4 rounded-xl dash-bordered">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-purple-500/20 rounded-lg">
-              <svg className="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="p-2 bg-primary-500/15 dark:bg-purple-500/20 rounded-lg">
+              <svg className="w-6 h-6 text-primary-700 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
             </div>
             <div>
-              <p className="text-2xl font-bold text-white">{assignments.length}</p>
-              <p className="text-xs text-gray-500">Завдань</p>
+              <p className="text-2xl font-bold dash-fg">{assignments.length}</p>
+              <p className="text-xs dash-muted-weak">Завдань</p>
             </div>
           </div>
         </div>
 
-        <div className="glass p-4 rounded-xl border border-gray-700">
+        <div className="glass p-4 rounded-xl dash-bordered">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-green-500/20 rounded-lg">
-              <svg className="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="p-2 bg-emerald-500/15 dark:bg-green-500/20 rounded-lg">
+              <svg className="w-6 h-6 text-emerald-700 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
             <div>
-              <p className="text-2xl font-bold text-white">
+              <p className="text-2xl font-bold dash-fg">
                 {students.reduce((sum, s) => {
                   const subs = s.submissions?.filter(sub => sub.status === 'GRADED') || [];
                   return sum + subs.length;
                 }, 0)}
               </p>
-              <p className="text-xs text-gray-500">Перевірено</p>
+              <p className="text-xs dash-muted-weak">Перевірено</p>
             </div>
           </div>
         </div>
 
-        <div className="glass p-4 rounded-xl border border-gray-700">
+        <div className="glass p-4 rounded-xl dash-bordered">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-yellow-500/20 rounded-lg">
-              <svg className="w-6 h-6 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="p-2 bg-amber-500/15 dark:bg-yellow-500/20 rounded-lg">
+              <svg className="w-6 h-6 text-amber-700 dark:text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
             <div>
-              <p className="text-2xl font-bold text-white">
+              <p className="text-2xl font-bold dash-fg">
                 {students.reduce((sum, s) => {
                   const subs = s.submissions?.filter(sub => sub.status === 'PENDING') || [];
                   return sum + subs.length;
                 }, 0)}
               </p>
-              <p className="text-xs text-gray-500">На перевірці</p>
+              <p className="text-xs dash-muted-weak">На перевірці</p>
             </div>
           </div>
         </div>
@@ -457,23 +461,23 @@ const GradebookPage = () => {
 
       {/* Gradebook Table */}
       {loading ? (
-        <div className="glass p-12 rounded-2xl text-center">
-          <div className="text-gray-400">Завантаження...</div>
+        <div className="glass p-12 rounded-2xl text-center dash-bordered">
+          <div className="dash-muted">Завантаження...</div>
         </div>
       ) : assignments.length === 0 ? (
-        <div className="glass p-12 rounded-2xl text-center border border-gray-700">
-          <svg className="w-20 h-20 mx-auto mb-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="glass p-12 rounded-2xl text-center dash-bordered">
+          <svg className="w-20 h-20 mx-auto mb-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
           </svg>
-          <h3 className="text-xl font-semibold text-white mb-2">Завдань ще немає</h3>
-          <p className="text-gray-400">Створіть завдання для цього курсу</p>
+          <h3 className="text-xl font-semibold dash-fg mb-2">Завдань ще немає</h3>
+          <p className="dash-muted">Створіть завдання для цього курсу</p>
         </div>
       ) : (
-        <div className="glass rounded-2xl border border-gray-700 overflow-x-auto">
+        <div className="glass rounded-2xl dash-bordered overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-gray-800/50 sticky top-0 z-10">
+            <thead className="dash-table-head sticky top-0 z-10">
               <tr>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider sticky left-0 bg-gray-800/90 backdrop-blur-sm">
+                <th className="px-4 py-3 text-left text-xs font-medium dash-muted uppercase tracking-wider sticky left-0 dash-table-head-sticky z-20">
                   Студент
                 </th>
                 {assignments.map((assignment) => {
@@ -481,25 +485,33 @@ const GradebookPage = () => {
                   return (
                     <th
                       key={assignment.id}
-                      className="px-3 py-3 text-center text-xs font-medium text-gray-400 uppercase tracking-wider min-w-[140px]"
+                      className="px-3 py-3 text-center text-xs font-medium dash-muted uppercase tracking-wider min-w-[140px]"
                     >
                       <div className="flex flex-col items-center gap-2">
-                        <span className="line-clamp-2 font-semibold text-white">{assignment.title}</span>
-                        <span className="text-purple-400 font-bold text-sm">Макс: {assignment.maxScore}</span>
+                        <span className="line-clamp-2 font-semibold dash-fg">{assignment.title}</span>
+                        <span className="text-primary-700 dark:text-purple-400 font-bold text-sm">Макс: {assignment.maxScore}</span>
                         {assignment.dueDate && (
-                          <span className="text-[10px] text-gray-500">
+                          <span className="text-[10px] dash-muted-weak">
                             До: {new Date(assignment.dueDate).toLocaleDateString('uk-UA', { day: 'numeric', month: 'short' })}
                           </span>
                         )}
                         {/* Stats */}
                         <div className="flex gap-2 text-[10px] mt-1">
-                          <span className="px-2 py-0.5 bg-green-500/20 text-green-400 rounded" title="Перевірено">
-                            ✓ {stats.graded}
+                          <span
+                            className="inline-flex items-center gap-0.5 px-2 py-0.5 bg-emerald-500/15 text-emerald-800 dark:bg-green-500/20 dark:text-green-400 rounded"
+                            title="Перевірено"
+                          >
+                            <CheckIcon className="w-3 h-3 shrink-0" aria-hidden />
+                            {stats.graded}
                           </span>
-                          <span className="px-2 py-0.5 bg-yellow-500/20 text-yellow-400 rounded" title="На перевірці">
-                            ⏳ {stats.pending}
+                          <span
+                            className="inline-flex items-center gap-0.5 px-2 py-0.5 bg-amber-500/15 text-amber-800 dark:bg-yellow-500/20 dark:text-yellow-400 rounded"
+                            title="На перевірці"
+                          >
+                            <ClockIcon className="w-3 h-3 shrink-0" aria-hidden />
+                            {stats.pending}
                           </span>
-                          <span className="px-2 py-0.5 bg-gray-500/20 text-gray-400 rounded" title="Не здано">
+                          <span className="px-2 py-0.5 bg-slate-200/80 text-slate-600 dark:bg-slate-600/30 dark:text-slate-400 rounded" title="Не здано">
                             — {stats.notSubmitted}
                           </span>
                         </div>
@@ -507,34 +519,34 @@ const GradebookPage = () => {
                     </th>
                   );
                 })}
-                <th className="px-4 py-3 text-center text-xs font-medium text-gray-400 uppercase tracking-wider sticky right-0 bg-gray-800/90 backdrop-blur-sm">
+                <th className="px-4 py-3 text-center text-xs font-medium dash-muted uppercase tracking-wider sticky right-0 dash-table-head-sticky z-20">
                   Середній<br/>бал
                 </th>
-                <th className="px-4 py-3 text-center text-xs font-medium text-gray-400 uppercase tracking-wider sticky right-0 bg-gray-800/90 backdrop-blur-sm">
+                <th className="px-4 py-3 text-center text-xs font-medium dash-muted uppercase tracking-wider sticky right-0 dash-table-head-sticky z-20">
                   Прогрес
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-700">
+            <tbody className="divide-y dash-divide">
               {sortedStudents.map((student) => {
                 const avg = calculateStudentAverage(student.id);
                 
                 return (
-                  <tr key={student.id} className="hover:bg-gray-800/30 transition">
-                    <td className="px-4 py-3 sticky left-0 bg-gray-900/90 backdrop-blur-sm">
+                  <tr key={student.id} className="dash-table-row">
+                    <td className="px-4 py-3 sticky left-0 dash-table-cell-sticky z-10">
                       <div className="flex items-center gap-2">
                         {student.avatar ? (
                           <img src={student.avatar} alt="" className="w-8 h-8 rounded-full" />
                         ) : (
-                          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-600 to-pink-600 flex items-center justify-center text-white text-xs font-bold">
+                          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary-600 to-primary-500 dark:from-purple-600 dark:to-pink-600 flex items-center justify-center text-white text-xs font-bold">
                             {student.firstName[0]}{student.lastName[0]}
                           </div>
                         )}
                         <div className="min-w-0">
-                          <p className="text-sm font-medium text-white truncate">
+                          <p className="text-sm font-medium dash-fg truncate">
                             {student.lastName} {student.firstName}
                           </p>
-                          <p className="text-xs text-gray-500 truncate">{student.email}</p>
+                          <p className="text-xs dash-muted-weak truncate">{student.email}</p>
                         </div>
                       </div>
                     </td>
@@ -546,7 +558,7 @@ const GradebookPage = () => {
                       return (
                         <td
                           key={assignment.id}
-                          className="px-3 py-3 text-center cursor-pointer hover:bg-purple-500/10 transition"
+                          className="px-3 py-3 text-center cursor-pointer hover:bg-primary-500/8 dark:hover:bg-purple-500/10 transition"
                           onClick={(e) => handleCellClick(student.id, assignment.id, e)}
                         >
                           <div className="relative group">
@@ -555,56 +567,56 @@ const GradebookPage = () => {
                                 <span className={`inline-block px-3 py-1.5 rounded-lg font-bold text-sm ${getScoreColor(submission.score, assignment.maxScore)}`}>
                                   {submission.score}
                                 </span>
-                                <span className="text-[10px] text-gray-600">
+                                <span className="text-[10px] dash-muted-weak">
                                   {((submission.score / assignment.maxScore) * 100).toFixed(0)}%
                                 </span>
                               </div>
                             ) : submission?.status === 'PENDING' ? (
                               <div className="flex flex-col items-center gap-1">
-                                <div className="w-8 h-8 rounded-full bg-yellow-500/20 flex items-center justify-center">
-                                  <svg className="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <div className="w-8 h-8 rounded-full bg-amber-500/15 dark:bg-yellow-500/20 flex items-center justify-center">
+                                  <svg className="w-5 h-5 text-amber-700 dark:text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                                   </svg>
                                 </div>
-                                <span className="text-[10px] text-yellow-400 font-medium">Перевірити</span>
+                                <span className="text-[10px] text-amber-800 dark:text-yellow-400 font-medium">Перевірити</span>
                               </div>
                             ) : (
                               <div className="flex flex-col items-center gap-1">
-                                <span className="text-gray-600 text-xl">—</span>
-                                <span className="text-[10px] text-gray-600">Не здано</span>
+                                <span className="text-slate-400 text-xl">—</span>
+                                <span className="text-[10px] text-slate-500 dark:text-slate-600">Не здано</span>
                               </div>
                             )}
-                            <div className="absolute inset-0 bg-purple-500/0 group-hover:bg-purple-500/10 rounded-lg transition"></div>
+                            <div className="absolute inset-0 bg-primary-500/0 group-hover:bg-primary-500/10 dark:group-hover:bg-purple-500/10 rounded-lg transition"></div>
                           </div>
                         </td>
                       );
                     })}
 
-                    <td className="px-4 py-3 text-center sticky right-0 bg-gray-900/90 backdrop-blur-sm">
+                    <td className="px-4 py-3 text-center sticky right-0 dash-table-cell-sticky z-[5]">
                       <span className={`text-lg font-bold ${
-                        avg >= 90 ? 'text-green-400' :
-                        avg >= 75 ? 'text-blue-400' :
-                        avg >= 60 ? 'text-yellow-400' :
-                        avg > 0 ? 'text-orange-400' :
-                        'text-gray-600'
+                        avg >= 90 ? 'text-emerald-700 dark:text-green-400' :
+                        avg >= 75 ? 'text-sky-700 dark:text-blue-400' :
+                        avg >= 60 ? 'text-amber-700 dark:text-yellow-400' :
+                        avg > 0 ? 'text-orange-700 dark:text-orange-400' :
+                        'text-slate-500'
                       }`}>
                         {avg > 0 ? avg.toFixed(1) : '—'}
                       </span>
                     </td>
 
-                    <td className="px-4 py-3 text-center sticky right-0 bg-gray-900/90 backdrop-blur-sm">
+                    <td className="px-4 py-3 text-center sticky right-0 dash-table-cell-sticky z-[5]">
                       <div className="flex items-center gap-2">
-                        <div className="flex-1 h-2 bg-gray-700 rounded-full overflow-hidden">
+                        <div className="flex-1 h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
                           <div
                             className={`h-full transition-all ${
-                              student.progress === 100 ? 'bg-gradient-to-r from-green-500 to-emerald-500' :
-                              student.progress >= 50 ? 'bg-gradient-to-r from-blue-500 to-cyan-500' :
-                              'bg-gradient-to-r from-purple-500 to-pink-500'
+                              student.progress === 100 ? 'bg-emerald-600 dark:bg-gradient-to-r dark:from-green-500 dark:to-emerald-500' :
+                              student.progress >= 50 ? 'bg-sky-600 dark:bg-gradient-to-r dark:from-blue-500 dark:to-cyan-500' :
+                              'bg-primary-600 dark:bg-gradient-to-r dark:from-purple-500 dark:to-pink-500'
                             }`}
                             style={{ width: `${student.progress}%` }}
                           />
                         </div>
-                        <span className="text-xs font-medium text-purple-400 min-w-[40px]">
+                        <span className="text-xs font-medium text-primary-700 dark:text-purple-400 min-w-[40px]">
                           {student.progress}%
                         </span>
                       </div>
@@ -614,22 +626,22 @@ const GradebookPage = () => {
               })}
 
               {/* Average row */}
-              <tr className="bg-purple-900/20 font-bold">
-                <td className="px-4 py-3 sticky left-0 bg-purple-900/40 backdrop-blur-sm">
-                  <span className="text-purple-400">Середнє по завданню</span>
+              <tr className="bg-primary-500/[0.06] dark:bg-purple-900/20 font-bold">
+                <td className="px-4 py-3 sticky left-0 bg-primary-100/90 dark:bg-purple-900/40 backdrop-blur-sm z-[5]">
+                  <span className="text-primary-800 dark:text-purple-400">Середнє по завданню</span>
                 </td>
                 {assignments.map((assignment) => {
                   const avg = calculateAssignmentAverage(assignment.id);
                   return (
                     <td key={assignment.id} className="px-3 py-3 text-center">
-                      <span className={`text-sm ${avg > 0 ? 'text-purple-400' : 'text-gray-600'}`}>
+                      <span className={`text-sm ${avg > 0 ? 'text-primary-800 dark:text-purple-400' : 'text-slate-500'}`}>
                         {avg > 0 ? avg.toFixed(1) : '—'}
                       </span>
                     </td>
                   );
                 })}
-                <td className="px-4 py-3 sticky right-0 bg-purple-900/40 backdrop-blur-sm"></td>
-                <td className="px-4 py-3 sticky right-0 bg-purple-900/40 backdrop-blur-sm"></td>
+                <td className="px-4 py-3 sticky right-0 bg-primary-100/90 dark:bg-purple-900/40 backdrop-blur-sm z-[5]"></td>
+                <td className="px-4 py-3 sticky right-0 bg-primary-100/90 dark:bg-purple-900/40 backdrop-blur-sm z-[5]"></td>
               </tr>
             </tbody>
           </table>
@@ -637,35 +649,35 @@ const GradebookPage = () => {
       )}
 
       {/* Legend */}
-      <div className="glass p-4 rounded-xl border border-gray-700">
-        <p className="text-sm font-medium text-gray-400 mb-3">Легенда:</p>
+      <div className="glass p-4 rounded-xl dash-bordered">
+        <p className="text-sm font-medium dash-muted mb-3">Легенда:</p>
         <div className="flex flex-wrap gap-4 text-xs">
           <div className="flex items-center gap-2">
-            <span className="px-3 py-1 rounded-lg bg-green-500/20 text-green-400 font-bold">90+</span>
-            <span className="text-gray-400">Відмінно</span>
+            <span className="px-3 py-1 rounded-lg bg-emerald-500/18 text-emerald-800 dark:bg-green-500/20 dark:text-green-400 font-bold">90+</span>
+            <span className="dash-muted">Відмінно</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="px-3 py-1 rounded-lg bg-blue-500/20 text-blue-400 font-bold">75-89</span>
-            <span className="text-gray-400">Добре</span>
+            <span className="px-3 py-1 rounded-lg bg-sky-500/18 text-sky-800 dark:bg-blue-500/20 dark:text-blue-400 font-bold">75-89</span>
+            <span className="dash-muted">Добре</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="px-3 py-1 rounded-lg bg-yellow-500/20 text-yellow-400 font-bold">60-74</span>
-            <span className="text-gray-400">Задовільно</span>
+            <span className="px-3 py-1 rounded-lg bg-amber-500/18 text-amber-800 dark:bg-yellow-500/20 dark:text-yellow-400 font-bold">60-74</span>
+            <span className="dash-muted">Задовільно</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="px-3 py-1 rounded-lg bg-orange-500/20 text-orange-400 font-bold">&lt;60</span>
-            <span className="text-gray-400">Потребує покращення</span>
+            <span className="px-3 py-1 rounded-lg bg-orange-500/18 text-orange-800 dark:bg-orange-500/20 dark:text-orange-400 font-bold">&lt;60</span>
+            <span className="dash-muted">Потребує покращення</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-yellow-400">⏳</span>
-            <span className="text-gray-400">На перевірці</span>
+            <ClockIcon className="w-4 h-4 text-amber-700 dark:text-yellow-400 shrink-0" aria-hidden />
+            <span className="dash-muted">На перевірці</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-gray-600">—</span>
-            <span className="text-gray-400">Не здано</span>
+            <span className="text-slate-400">—</span>
+            <span className="dash-muted">Не здано</span>
           </div>
         </div>
-        <p className="text-xs text-gray-500 mt-3">💡 Клікніть на клітинку щоб переглянути деталі та виставити оцінку</p>
+        <p className="text-xs dash-muted-weak mt-3">Клікніть на клітинку, щоб переглянути деталі та виставити оцінку.</p>
       </div>
 
       {/* Submission View Modal */}
@@ -679,14 +691,16 @@ const GradebookPage = () => {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-white">
+              <h2 className="text-2xl font-bold dash-fg">
                 {viewingSubmission.submission ? 'Перегляд завдання' : 'Завдання не здано'}
               </h2>
               <button
+                type="button"
                 onClick={() => setViewingSubmission(null)}
-                className="p-2 hover:bg-gray-700 rounded-lg transition"
+                className="p-2 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg transition"
+                aria-label="Закрити"
               >
-                <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-6 h-6 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
@@ -694,36 +708,36 @@ const GradebookPage = () => {
 
             <div className="space-y-6">
               {/* Student Info */}
-              <div className="glass p-4 rounded-xl border border-blue-500/30 bg-blue-500/10">
+              <div className="glass p-4 rounded-xl border border-sky-500/25 dark:border-blue-500/30 bg-sky-500/[0.06] dark:bg-blue-500/10">
                 <div className="flex items-center gap-3">
                   {viewingSubmission.student.avatar ? (
                     <img src={viewingSubmission.student.avatar} alt="" className="w-14 h-14 rounded-full" />
                   ) : (
-                    <div className="w-14 h-14 rounded-full bg-gradient-to-br from-purple-600 to-pink-600 flex items-center justify-center text-white font-bold text-lg">
+                    <div className="w-14 h-14 rounded-full bg-gradient-to-br from-primary-600 to-primary-500 dark:from-purple-600 dark:to-pink-600 flex items-center justify-center text-white font-bold text-lg">
                       {viewingSubmission.student.firstName[0]}{viewingSubmission.student.lastName[0]}
                     </div>
                   )}
                   <div>
-                    <h4 className="text-lg font-semibold text-white">
+                    <h4 className="text-lg font-semibold dash-fg">
                       {viewingSubmission.student.firstName} {viewingSubmission.student.lastName}
                     </h4>
-                    <p className="text-sm text-gray-400">{viewingSubmission.student.email}</p>
+                    <p className="text-sm dash-muted">{viewingSubmission.student.email}</p>
                   </div>
                 </div>
               </div>
 
               {/* Assignment Info */}
-              <div className="glass p-4 rounded-xl border border-gray-700">
-                <h3 className="text-lg font-semibold text-white mb-3">{viewingSubmission.assignment.title}</h3>
+              <div className="glass p-4 rounded-xl dash-bordered">
+                <h3 className="text-lg font-semibold dash-fg mb-3">{viewingSubmission.assignment.title}</h3>
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
-                    <p className="text-gray-500">Максимальна оцінка</p>
-                    <p className="text-purple-400 font-bold text-lg">{viewingSubmission.assignment.maxScore} балів</p>
+                    <p className="dash-muted-weak">Максимальна оцінка</p>
+                    <p className="text-primary-800 dark:text-purple-400 font-bold text-lg">{viewingSubmission.assignment.maxScore} балів</p>
                   </div>
                   {viewingSubmission.assignment.dueDate && (
                     <div>
-                      <p className="text-gray-500">Кінцевий термін</p>
-                      <p className="text-gray-300">{new Date(viewingSubmission.assignment.dueDate).toLocaleDateString('uk-UA', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+                      <p className="dash-muted-weak">Кінцевий термін</p>
+                      <p className="text-slate-800 dark:text-slate-300">{new Date(viewingSubmission.assignment.dueDate).toLocaleDateString('uk-UA', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
                     </div>
                   )}
                 </div>
@@ -733,19 +747,31 @@ const GradebookPage = () => {
                 <>
                   {/* Submission Status & Dates */}
                   <div className="grid grid-cols-2 gap-4">
-                    <div className="glass p-4 rounded-xl border border-gray-700">
-                      <p className="text-gray-500 text-sm mb-2">Статус</p>
-                      <span className={`inline-block px-4 py-2 rounded-lg font-medium ${
-                        viewingSubmission.submission.status === 'GRADED'
-                          ? 'bg-green-500/20 text-green-400'
-                          : 'bg-yellow-500/20 text-yellow-400'
-                      }`}>
-                        {viewingSubmission.submission.status === 'GRADED' ? '✓ Перевірено' : '⏳ На перевірці'}
+                    <div className="glass p-4 rounded-xl dash-bordered">
+                      <p className="dash-muted text-sm mb-2">Статус</p>
+                      <span
+                        className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium ${
+                          viewingSubmission.submission.status === 'GRADED'
+                            ? 'bg-emerald-500/15 text-emerald-800 dark:bg-green-500/20 dark:text-green-400'
+                            : 'bg-amber-500/15 text-amber-800 dark:bg-yellow-500/20 dark:text-yellow-400'
+                        }`}
+                      >
+                        {viewingSubmission.submission.status === 'GRADED' ? (
+                          <>
+                            <CheckIcon className="w-4 h-4 shrink-0" aria-hidden />
+                            Перевірено
+                          </>
+                        ) : (
+                          <>
+                            <ClockIcon className="w-4 h-4 shrink-0" aria-hidden />
+                            На перевірці
+                          </>
+                        )}
                       </span>
                     </div>
-                    <div className="glass p-4 rounded-xl border border-gray-700">
-                      <p className="text-gray-500 text-sm mb-2">Здано</p>
-                      <p className="text-white font-medium">
+                    <div className="glass p-4 rounded-xl dash-bordered">
+                      <p className="dash-muted text-sm mb-2">Здано</p>
+                      <p className="dash-fg-soft font-medium">
                         {viewingSubmission.submission.submittedAt 
                           ? new Date(viewingSubmission.submission.submittedAt).toLocaleString('uk-UA', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })
                           : '—'}
@@ -756,19 +782,19 @@ const GradebookPage = () => {
                   {/* Student's Work */}
                   {viewingSubmission.submission.content && (
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Робота студента</label>
-                      <div className="glass p-5 rounded-xl border border-gray-700 max-h-60 overflow-y-auto">
-                        <p className="text-white whitespace-pre-wrap leading-relaxed">{viewingSubmission.submission.content}</p>
+                      <label className="block text-sm font-medium dash-muted mb-2">Робота студента</label>
+                      <div className="glass p-5 rounded-xl dash-bordered max-h-60 overflow-y-auto">
+                        <p className="dash-fg-soft whitespace-pre-wrap leading-relaxed">{viewingSubmission.submission.content}</p>
                       </div>
                     </div>
                   )}
 
                   {/* Grading Form */}
-                  <div className="p-6 bg-purple-900/20 rounded-xl border border-purple-500/30">
-                    <h4 className="text-lg font-semibold text-white mb-4">Оцінювання</h4>
+                  <div className="p-6 bg-primary-500/[0.06] dark:bg-purple-900/20 rounded-xl border border-primary-500/25 dark:border-purple-500/30">
+                    <h4 className="text-lg font-semibold dash-fg mb-4">Оцінювання</h4>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                       <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-2">
+                        <label className="block text-sm font-medium dash-muted mb-2">
                           Оцінка (0 - {viewingSubmission.assignment.maxScore}) *
                         </label>
                         <input
@@ -778,15 +804,15 @@ const GradebookPage = () => {
                           step="0.1"
                           value={gradingForm.score}
                           onChange={(e) => setGradingForm({ ...gradingForm, score: e.target.value })}
-                          className="w-full px-4 py-2.5 bg-gray-800/50 border border-gray-600 rounded-xl text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none transition"
+                          className="dash-control placeholder:text-slate-400"
                           placeholder="Введіть оцінку"
                         />
                       </div>
                       {viewingSubmission.submission.status === 'GRADED' && (
                         <div className="flex items-end">
-                          <div className="glass p-4 rounded-xl border border-green-500/30 w-full">
-                            <p className="text-sm text-gray-400 mb-1">Попередня оцінка</p>
-                            <p className="text-2xl font-bold text-green-400">
+                          <div className="glass p-4 rounded-xl border border-emerald-500/25 dark:border-green-500/30 w-full">
+                            <p className="text-sm dash-muted mb-1">Попередня оцінка</p>
+                            <p className="text-2xl font-bold text-emerald-700 dark:text-green-400">
                               {viewingSubmission.submission.score} / {viewingSubmission.assignment.maxScore}
                             </p>
                           </div>
@@ -795,16 +821,16 @@ const GradebookPage = () => {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Відгук для студента</label>
+                      <label className="block text-sm font-medium dash-muted mb-2">Відгук для студента</label>
                       <textarea
                         value={gradingForm.feedback}
                         onChange={(e) => setGradingForm({ ...gradingForm, feedback: e.target.value })}
                         rows={4}
-                        className="w-full px-4 py-2.5 bg-gray-800/50 border border-gray-600 rounded-xl text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none transition resize-none"
+                        className="dash-control resize-none placeholder:text-slate-400"
                         placeholder="Напишіть відгук для студента..."
                       />
                       {viewingSubmission.submission.feedback && (
-                        <p className="text-xs text-gray-500 mt-2">Попередній відгук: "{viewingSubmission.submission.feedback}"</p>
+                        <p className="text-xs dash-muted-weak mt-2">Попередній відгук: "{viewingSubmission.submission.feedback}"</p>
                       )}
                     </div>
                   </div>
@@ -812,14 +838,16 @@ const GradebookPage = () => {
                   {/* Action Buttons */}
                   <div className="flex gap-3 justify-end">
                     <button
+                      type="button"
                       onClick={() => setViewingSubmission(null)}
-                      className="px-6 py-2.5 bg-gray-700 hover:bg-gray-600 text-white rounded-xl font-medium transition"
+                      className="px-6 py-2.5 bg-slate-200 hover:bg-slate-300 text-slate-900 dark:bg-slate-700 dark:hover:bg-slate-600 dark:text-white rounded-xl font-medium transition"
                     >
                       Закрити
                     </button>
                     <button
+                      type="button"
                       onClick={handleGradeSubmitFromModal}
-                      className="px-6 py-2.5 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white rounded-xl font-medium transition flex items-center gap-2"
+                      className="px-6 py-2.5 bg-gradient-to-r from-primary-600 to-fuchsia-600 hover:from-primary-500 hover:to-fuchsia-500 text-white rounded-xl font-medium transition flex items-center gap-2"
                     >
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
@@ -829,12 +857,12 @@ const GradebookPage = () => {
                   </div>
                 </>
               ) : (
-                <div className="glass p-12 rounded-2xl text-center border border-gray-700">
-                  <svg className="w-20 h-20 mx-auto mb-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="glass p-12 rounded-2xl text-center dash-bordered">
+                  <svg className="w-20 h-20 mx-auto mb-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                   </svg>
-                  <h3 className="text-xl font-semibold text-white mb-2">Завдання ще не здано</h3>
-                  <p className="text-gray-400">Студент не здав це завдання</p>
+                  <h3 className="text-xl font-semibold dash-fg mb-2">Завдання ще не здано</h3>
+                  <p className="dash-muted">Студент не здав це завдання</p>
                 </div>
               )}
             </div>

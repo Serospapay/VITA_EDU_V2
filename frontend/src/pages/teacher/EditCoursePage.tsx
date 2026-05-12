@@ -474,7 +474,7 @@ const EditCoursePage = () => {
 
                   <div className="grid md:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Назва уроку *</label>
+                      <label className="block text-sm font-medium text-gray-900 dark:text-gray-300 mb-2">Назва уроку *</label>
                       <input
                         type="text"
                         value={lessonForm.title}
@@ -490,7 +490,7 @@ const EditCoursePage = () => {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Тривалість (хв) *</label>
+                      <label className="block text-sm font-medium text-gray-900 dark:text-gray-300 mb-2">Тривалість (хв) *</label>
                       <input
                         type="number"
                         value={lessonForm.duration}
@@ -544,7 +544,7 @@ const EditCoursePage = () => {
                   </div>
 
                   <div className="flex items-center gap-6">
-                    <label className="flex items-center gap-2 text-gray-300 cursor-pointer">
+                    <label className="flex items-center gap-2 text-gray-900 dark:text-gray-300 cursor-pointer">
                       <input
                         type="checkbox"
                         checked={lessonForm.isPublished}
@@ -554,7 +554,7 @@ const EditCoursePage = () => {
                       <span className="text-sm">Опублікувати</span>
                     </label>
 
-                    <label className="flex items-center gap-2 text-gray-300 cursor-pointer">
+                    <label className="flex items-center gap-2 text-gray-900 dark:text-gray-300 cursor-pointer">
                       <input
                         type="checkbox"
                         checked={lessonForm.isFree}

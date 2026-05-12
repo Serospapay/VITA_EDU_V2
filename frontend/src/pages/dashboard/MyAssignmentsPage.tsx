@@ -333,7 +333,7 @@ const MyAssignmentsPage = () => {
 
               {/* GitHub URL */}
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-gray-900 dark:text-gray-300 mb-2">
                   Посилання на GitHub репозиторій (опціонально)
                 </label>
                 <div className="relative">
@@ -352,7 +352,7 @@ const MyAssignmentsPage = () => {
 
               {/* File Upload */}
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-gray-900 dark:text-gray-300 mb-2">
                   Файли (до 5 файлів, макс. 10MB кожен)
                 </label>
                 <div
@@ -414,7 +414,7 @@ const MyAssignmentsPage = () => {
 
               {/* Description / Notes */}
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-gray-900 dark:text-gray-300 mb-2">
                   Опис / Примітки (опціонально)
                 </label>
                 <textarea

@@ -4,6 +4,7 @@ import { logout } from '../store/slices/authSlice';
 import { useNavigate } from 'react-router-dom';
 import CourseChatWidget from '../components/CourseChatWidget';
 import Logo from '../components/Logo';
+import ThemeToggle from '../components/ThemeToggle';
 
 const DashboardLayout = () => {
   const { user } = useAppSelector((state) => state.auth);
@@ -23,24 +24,29 @@ const DashboardLayout = () => {
       to={to}
       className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
         isActive(to)
-          ? 'bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-white border-l-4 border-purple-500'
-          : 'text-gray-400 hover:text-white hover:bg-white/5'
+          ? 'bg-primary-500/12 dark:bg-primary-500/18 text-primary-900 dark:text-white border-l-4 border-primary-600 dark:border-primary-400'
+          : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5'
       }`}
     >
-      <div className={`w-5 h-5 ${isActive(to) ? 'text-purple-400' : ''}`}>{icon}</div>
+      <div className={`w-5 h-5 shrink-0 ${isActive(to) ? 'text-primary-700 dark:text-primary-300' : 'text-slate-500 dark:text-slate-400'}`}>{icon}</div>
       <span className="font-medium">{children}</span>
     </Link>
   );
 
   return (
-    <div className="min-h-screen flex bg-[#0a0b14]">
-      {/* Sidebar */}
-      <aside className="w-64 bg-gradient-to-b from-gray-900/50 to-gray-900/30 backdrop-blur-xl border-r border-gray-800/50 flex flex-col">
+    <div className="min-h-screen flex bg-slate-50 dark:bg-[#0a0b14]">
+      {/* Sidebar — той самий «темп» що й основний фон, без напівпрозорого сірого в dark */}
+      <aside className="w-64 flex flex-col border-r dash-bordered bg-white dark:bg-[#0c0e16] shadow-sm dark:shadow-none">
         {/* Logo */}
-        <div className="p-6 border-b border-gray-800/50">
-          <div className="flex flex-col gap-2">
-            <Logo size="md" />
-            <p className="text-xs text-gray-500 mt-1 px-1">Панель керування</p>
+        <div className="p-6 border-b dash-bordered">
+          <div className="flex flex-col gap-3">
+            <div className="min-w-0 pr-1">
+              <Logo size="md" className="min-w-0" />
+            </div>
+            <div className="flex items-center justify-between gap-3 px-1">
+              <p className="text-xs dash-muted truncate">Панель керування</p>
+              <ThemeToggle />
+            </div>
           </div>
         </div>
 
@@ -203,25 +209,25 @@ const DashboardLayout = () => {
         </nav>
 
         {/* User Profile & Logout */}
-        <div className="p-4 border-t border-gray-800/50 space-y-2">
+        <div className="p-4 border-t dash-bordered space-y-2">
           {user && (
-            <div className="px-4 py-3 bg-white/5 rounded-lg mb-2">
+            <div className="px-4 py-3 bg-slate-100 dark:bg-white/5 rounded-lg mb-2">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary-600 to-primary-500 dark:from-primary-500 dark:to-fuchsia-500 flex items-center justify-center text-white font-bold shrink-0">
                   {user.firstName[0]}{user.lastName[0]}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-white truncate">
+                  <p className="text-sm font-medium dash-fg truncate">
                     {user.firstName} {user.lastName}
                   </p>
-                  <p className="text-xs text-gray-400 truncate">{user.email}</p>
+                  <p className="text-xs dash-muted truncate">{user.email}</p>
                 </div>
               </div>
             </div>
           )}
           <button
             onClick={handleLogout}
-            className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-red-400 hover:bg-red-500/10 transition-all group"
+            className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 transition-all group"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
@@ -243,7 +249,7 @@ const DashboardLayout = () => {
            location.pathname !== '/teacher/gradebook' && (
             <button
               onClick={() => navigate(-1)}
-              className="inline-flex items-center gap-2 mb-6 px-4 py-2 bg-purple-600/20 hover:bg-purple-600/30 border border-purple-500/30 text-purple-400 rounded-xl font-medium transition group"
+              className="inline-flex items-center gap-2 mb-6 px-4 py-2 bg-purple-50 dark:bg-purple-600/20 hover:bg-purple-100 dark:hover:bg-purple-600/30 border border-purple-200 dark:border-purple-500/30 text-purple-700 dark:text-purple-400 rounded-xl font-medium transition group"
             >
               <svg className="w-5 h-5 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />

@@ -56,14 +56,14 @@ const LoginPage = () => {
               Вхід в систему
             </span>
           </h2>
-          <p className="text-lg text-gray-400">
+          <p className="text-lg text-gray-600 dark:text-gray-400">
             Введіть свої дані для входу
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="glass p-8 rounded-2xl space-y-6 shadow-lg">
           <div>
-            <label className="block text-sm font-semibold mb-2 text-gray-100">
+            <label className="block text-sm font-semibold mb-2 text-gray-900 dark:text-gray-100">
               Email
             </label>
             <input
@@ -77,7 +77,7 @@ const LoginPage = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-semibold mb-2 text-gray-100">
+            <label className="block text-sm font-semibold mb-2 text-gray-900 dark:text-gray-100">
               Пароль
             </label>
             <input
@@ -94,30 +94,30 @@ const LoginPage = () => {
             {loading ? 'Вхід...' : 'Увійти'}
           </button>
 
-          <p className="text-center text-sm text-gray-300">
+          <p className="text-center text-sm text-gray-700 dark:text-gray-300">
             Немає акаунту?{' '}
-            <Link to="/register" className="text-purple-400 hover:underline font-semibold">
+            <Link to="/register" className="text-purple-600 dark:text-purple-400 hover:underline font-semibold">
               Зареєструватись
             </Link>
           </p>
         </form>
 
-        <div className="mt-8 glass p-6 rounded-xl shadow-md">
-          <p className="text-sm font-semibold mb-3 text-gray-100">
+        <div className="mt-8 glass p-6 rounded-xl shadow-md border border-gray-200 dark:border-transparent">
+          <p className="text-sm font-semibold mb-3 text-gray-900 dark:text-gray-100">
             Тестові акаунти:
           </p>
-          <div className="space-y-2 text-sm text-gray-300 font-mono">
-            <div className="bg-gray-800 p-2 rounded">
-              <p className="font-semibold text-xs text-gray-400 mb-1">ADMIN</p>
-              <p>admin@vitaedu.com / password123</p>
+          <div className="space-y-2 text-sm font-mono">
+            <div className="bg-gray-100 dark:bg-gray-800 p-3 rounded-lg border border-gray-200 dark:border-transparent">
+              <p className="font-semibold text-xs text-gray-600 dark:text-gray-400 mb-1">ADMIN</p>
+              <p className="text-gray-900 dark:text-gray-100">admin@vitaedu.com / password123</p>
             </div>
-            <div className="bg-gray-800 p-2 rounded">
-              <p className="font-semibold text-xs text-gray-400 mb-1">TEACHER</p>
-              <p>dmytro.koval@vitaedu.com / password123</p>
+            <div className="bg-gray-100 dark:bg-gray-800 p-3 rounded-lg border border-gray-200 dark:border-transparent">
+              <p className="font-semibold text-xs text-gray-600 dark:text-gray-400 mb-1">TEACHER</p>
+              <p className="text-gray-900 dark:text-gray-100">dmytro.koval@vitaedu.com / password123</p>
             </div>
-            <div className="bg-gray-800 p-2 rounded">
-              <p className="font-semibold text-xs text-gray-400 mb-1">STUDENT</p>
-              <p>denys.lysenko@student.vitaedu.com / password123</p>
+            <div className="bg-gray-100 dark:bg-gray-800 p-3 rounded-lg border border-gray-200 dark:border-transparent">
+              <p className="font-semibold text-xs text-gray-600 dark:text-gray-400 mb-1">STUDENT</p>
+              <p className="text-gray-900 dark:text-gray-100">denys.lysenko@student.vitaedu.com / password123</p>
             </div>
           </div>
         </div>

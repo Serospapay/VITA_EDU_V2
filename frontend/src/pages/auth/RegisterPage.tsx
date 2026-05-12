@@ -75,7 +75,7 @@ const RegisterPage = () => {
               Реєстрація
             </span>
           </h2>
-          <p className="text-lg text-gray-400">
+          <p className="text-lg text-gray-600 dark:text-gray-400">
             Створіть свій акаунт
           </p>
         </div>
@@ -83,7 +83,7 @@ const RegisterPage = () => {
         <form onSubmit={handleSubmit} className="glass p-8 rounded-2xl space-y-5 shadow-lg">
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-semibold mb-2 text-gray-100">
+              <label className="block text-sm font-semibold mb-2 text-gray-900 dark:text-gray-100">
                 Ім'я
               </label>
               <input
@@ -99,7 +99,7 @@ const RegisterPage = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-semibold mb-2 text-gray-100">
+              <label className="block text-sm font-semibold mb-2 text-gray-900 dark:text-gray-100">
                 Прізвище
               </label>
               <input
@@ -116,7 +116,7 @@ const RegisterPage = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-semibold mb-2 text-gray-100">
+            <label className="block text-sm font-semibold mb-2 text-gray-900 dark:text-gray-100">
               Email
             </label>
             <input
@@ -132,7 +132,7 @@ const RegisterPage = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-semibold mb-2 text-gray-100">
+            <label className="block text-sm font-semibold mb-2 text-gray-900 dark:text-gray-100">
               Пароль
             </label>
             <input
@@ -149,7 +149,7 @@ const RegisterPage = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-semibold mb-2 text-gray-100">
+            <label className="block text-sm font-semibold mb-2 text-gray-900 dark:text-gray-100">
               Я...
             </label>
             <select
@@ -169,7 +169,7 @@ const RegisterPage = () => {
 
           {formData.role === 'STUDENT' && courses.length > 0 && (
             <div>
-              <label className="block text-sm font-semibold mb-2 text-gray-100">
+              <label className="block text-sm font-semibold mb-2 text-gray-900 dark:text-gray-100">
                 Оберіть курс (опціонально)
               </label>
               <select
@@ -187,7 +187,7 @@ const RegisterPage = () => {
                 ))}
               </select>
               {formData.requestedCourseId && (
-                <p className="text-xs text-purple-400 mt-2">
+                <p className="text-xs text-purple-600 dark:text-purple-400 mt-2">
                   ● Після підтвердження адміністратором ви будете автоматично записані на цей курс
                 </p>
               )}
@@ -202,9 +202,9 @@ const RegisterPage = () => {
             {loading ? 'Створення акаунту...' : 'Зареєструватись'}
           </button>
 
-          <p className="text-center text-sm text-gray-300">
+          <p className="text-center text-sm text-gray-700 dark:text-gray-300">
             Вже є акаунт?{' '}
-            <Link to="/login" className="text-purple-400 hover:underline font-semibold">
+            <Link to="/login" className="text-purple-600 dark:text-purple-400 hover:underline font-semibold">
               Увійти
             </Link>
           </p>

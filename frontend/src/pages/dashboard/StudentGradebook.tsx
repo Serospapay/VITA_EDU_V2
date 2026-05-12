@@ -359,7 +359,7 @@ const StudentGradebook = () => {
               {/* GitHub URL */}
               {viewingSubmission.githubUrl && (
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">GitHub репозиторій</label>
+                  <label className="block text-sm font-medium text-gray-900 dark:text-gray-300 mb-2">GitHub репозиторій</label>
                   <a
                     href={viewingSubmission.githubUrl}
                     target="_blank"
@@ -380,7 +380,7 @@ const StudentGradebook = () => {
               {/* Files */}
               {viewingSubmission.files && viewingSubmission.files.length > 0 && (
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Прикріплені файли</label>
+                  <label className="block text-sm font-medium text-gray-900 dark:text-gray-300 mb-2">Прикріплені файли</label>
                   <div className="space-y-2">
                     {viewingSubmission.files.map((fileUrl: string, index: number) => {
                       const fileName = fileUrl.split('/').pop() || 'file';
@@ -428,7 +428,7 @@ const StudentGradebook = () => {
               {/* Content / Description */}
               {viewingSubmission.content && (
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Ваш опис / примітки</label>
+                  <label className="block text-sm font-medium text-gray-900 dark:text-gray-300 mb-2">Ваш опис / примітки</label>
                   <div className="glass p-4 rounded-xl border border-gray-700">
                     <p className="text-white whitespace-pre-wrap">{viewingSubmission.content}</p>
                   </div>

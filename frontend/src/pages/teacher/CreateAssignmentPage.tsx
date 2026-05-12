@@ -291,7 +291,7 @@ const CreateAssignmentPage = () => {
           <h2 className="text-xl font-bold text-white mb-4">Основна інформація</h2>
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Курс *</label>
+              <label className="block text-sm font-medium text-gray-900 dark:text-gray-300 mb-2">Курс *</label>
               <select
                 value={formData.courseId}
                 onChange={(e) => setFormData({ ...formData, courseId: e.target.value })}
@@ -308,7 +308,7 @@ const CreateAssignmentPage = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Назва завдання *</label>
+              <label className="block text-sm font-medium text-gray-900 dark:text-gray-300 mb-2">Назва завдання *</label>
               <input
                 type="text"
                 value={formData.title}
@@ -320,7 +320,7 @@ const CreateAssignmentPage = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Опис *</label>
+              <label className="block text-sm font-medium text-gray-900 dark:text-gray-300 mb-2">Опис *</label>
               <textarea
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
@@ -333,7 +333,7 @@ const CreateAssignmentPage = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Максимальна оцінка</label>
+                <label className="block text-sm font-medium text-gray-900 dark:text-gray-300 mb-2">Максимальна оцінка</label>
                 <input
                   type="number"
                   value={formData.maxScore}
@@ -344,7 +344,7 @@ const CreateAssignmentPage = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Прохідна оцінка (%)</label>
+                <label className="block text-sm font-medium text-gray-900 dark:text-gray-300 mb-2">Прохідна оцінка (%)</label>
                 <input
                   type="number"
                   value={formData.passingScore}
@@ -356,7 +356,7 @@ const CreateAssignmentPage = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Кінцевий термін</label>
+                <label className="block text-sm font-medium text-gray-900 dark:text-gray-300 mb-2">Кінцевий термін</label>
                 <input
                   type="datetime-local"
                   value={formData.dueDate}
@@ -369,7 +369,7 @@ const CreateAssignmentPage = () => {
             {(type === 'TEST' || type === 'QUIZ') && (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Ліміт часу (хв)</label>
+                  <label className="block text-sm font-medium text-gray-900 dark:text-gray-300 mb-2">Ліміт часу (хв)</label>
                   <input
                     type="number"
                     value={formData.timeLimit}
@@ -381,7 +381,7 @@ const CreateAssignmentPage = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Макс. спроб</label>
+                  <label className="block text-sm font-medium text-gray-900 dark:text-gray-300 mb-2">Макс. спроб</label>
                   <input
                     type="number"
                     value={formData.maxAttempts}
@@ -396,7 +396,7 @@ const CreateAssignmentPage = () => {
 
             {(type === 'PRACTICAL' || type === 'PROJECT') && (
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Інструкції</label>
+                <label className="block text-sm font-medium text-gray-900 dark:text-gray-300 mb-2">Інструкції</label>
                 <textarea
                   value={formData.instructions}
                   onChange={(e) => setFormData({ ...formData, instructions: e.target.value })}
@@ -534,7 +534,7 @@ const CreateAssignmentPage = () => {
 
                         {/* Points */}
                         <div className="flex items-center gap-4">
-                          <label className="flex items-center gap-2 text-sm text-gray-300">
+                          <label className="flex items-center gap-2 text-sm text-gray-900 dark:text-gray-300">
                             <span>Балів:</span>
                             <input
                               type="number"

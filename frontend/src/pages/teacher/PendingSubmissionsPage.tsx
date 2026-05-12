@@ -145,7 +145,7 @@ const PendingSubmissionsPage = () => {
         <div className="glass p-6 rounded-2xl border border-gray-700">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Пошук</label>
+              <label className="block text-sm font-medium text-gray-900 dark:text-gray-300 mb-2">Пошук</label>
               <input
                 type="text"
                 placeholder="Студент або завдання..."
@@ -156,7 +156,7 @@ const PendingSubmissionsPage = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Курс</label>
+              <label className="block text-sm font-medium text-gray-900 dark:text-gray-300 mb-2">Курс</label>
               <select
                 value={filter.courseId}
                 onChange={(e) => setFilter({ ...filter, courseId: e.target.value })}
@@ -303,7 +303,7 @@ const PendingSubmissionsPage = () => {
               {/* GitHub URL */}
               {gradingSubmission.githubUrl && (
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">GitHub репозиторій</label>
+                  <label className="block text-sm font-medium text-gray-900 dark:text-gray-300 mb-2">GitHub репозиторій</label>
                   <a
                     href={gradingSubmission.githubUrl}
                     target="_blank"
@@ -324,7 +324,7 @@ const PendingSubmissionsPage = () => {
               {/* Files */}
               {gradingSubmission.files && gradingSubmission.files.length > 0 && (
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Прикріплені файли</label>
+                  <label className="block text-sm font-medium text-gray-900 dark:text-gray-300 mb-2">Прикріплені файли</label>
                   <div className="space-y-2">
                     {gradingSubmission.files.map((fileUrl: string, index: number) => {
                       const fileName = fileUrl.split('/').pop() || 'file';
@@ -372,7 +372,7 @@ const PendingSubmissionsPage = () => {
               {/* Student's Work / Description */}
               {gradingSubmission.content && (
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Опис / Примітки студента</label>
+                  <label className="block text-sm font-medium text-gray-900 dark:text-gray-300 mb-2">Опис / Примітки студента</label>
                   <div className="glass p-4 rounded-xl border border-gray-700 max-h-60 overflow-y-auto">
                     <p className="text-white whitespace-pre-wrap">{gradingSubmission.content}</p>
                   </div>
@@ -381,7 +381,7 @@ const PendingSubmissionsPage = () => {
 
               {/* Score Input */}
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-gray-900 dark:text-gray-300 mb-2">
                   Оцінка (0 - {gradingSubmission.assignment.maxScore}) *
                 </label>
                 <input
@@ -398,7 +398,7 @@ const PendingSubmissionsPage = () => {
 
               {/* Feedback Textarea */}
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Відгук (опціонально)</label>
+                <label className="block text-sm font-medium text-gray-900 dark:text-gray-300 mb-2">Відгук (опціонально)</label>
                 <textarea
                   value={gradeForm.feedback}
                   onChange={(e) => setGradeForm({ ...gradeForm, feedback: e.target.value })}

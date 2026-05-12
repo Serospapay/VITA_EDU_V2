@@ -78,7 +78,7 @@ const ProfilePage = () => {
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Ім'я</label>
+                    <label className="block text-sm font-medium text-gray-900 dark:text-gray-300 mb-2">Ім'я</label>
                     <input
                       type="text"
                       value={formData.firstName}
@@ -88,7 +88,7 @@ const ProfilePage = () => {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Прізвище</label>
+                    <label className="block text-sm font-medium text-gray-900 dark:text-gray-300 mb-2">Прізвище</label>
                     <input
                       type="text"
                       value={formData.lastName}
@@ -112,7 +112,7 @@ const ProfilePage = () => {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Телефон</label>
+                    <label className="block text-sm font-medium text-gray-900 dark:text-gray-300 mb-2">Телефон</label>
                     <input
                       type="tel"
                       value={formData.phone}
@@ -121,7 +121,7 @@ const ProfilePage = () => {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Дата народження</label>
+                    <label className="block text-sm font-medium text-gray-900 dark:text-gray-300 mb-2">Дата народження</label>
                     <input
                       type="date"
                       value={formData.dateOfBirth}
